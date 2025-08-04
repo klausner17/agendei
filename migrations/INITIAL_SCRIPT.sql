@@ -1,0 +1,22 @@
+CREATE TABLE IF NOT EXISTS professional (
+    id UUID PRIMARY KEY,
+    store_id UUID,
+    name VARCHAR(100) NOT NULL,
+    bio TEXT,
+    email VARCHAR(100),
+    password VARCHAR(100),
+    house_number VARCHAR(20),
+    complement VARCHAR(100),
+    street VARCHAR(100),
+    neighborhood VARCHAR(100),
+    city VARCHAR(100),
+    state VARCHAR(100),
+    country VARCHAR(100),
+    zip_code VARCHAR(100),
+    phone_number VARCHAR(20),
+    phone_is_whatsapp BOOLEAN,
+    instagram VARCHAR(100),
+    facebook VARCHAR(100),
+    photo VARCHAR(100),
+    work_hours VARCHAR(500)
+);
