@@ -4,7 +4,6 @@ import com.klausner.infraestructure.foldAndRespond
 import com.klausner.repositories.professional.ProfessionalRepository
 import com.klausner.usecases.professional.CreateProfessionalUseCase
 import com.klausner.usecases.professional.GetProfessionalUseCase
-import io.ktor.server.auth.authenticate
 import io.ktor.server.request.receive
 import io.ktor.server.routing.Route
 import io.ktor.server.routing.get
@@ -18,9 +17,6 @@ fun Route.professionalRoutes() {
     val getProfessionalUseCase = GetProfessionalUseCase(professionalRepository)
 
     route("/professionals") {
-        authenticate {
-
-        }
         post {
             val professional = call.receive<CreateProfessionalUseCase.Input>()
             foldAndRespond(createProfessionalUseCase.execute(professional))

@@ -28,8 +28,6 @@ dependencies {
     implementation("io.ktor:ktor-server-content-negotiation:$ktor_version")
     implementation("io.ktor:ktor-server-status-pages:$ktor_version")
     implementation("io.ktor:ktor-serialization-kotlinx-json:$ktor_version")
-    implementation("io.ktor:ktor-server-sessions:$ktor_version")
-    implementation("io.ktor:ktor-server-auth:$ktor_version")
     implementation("org.slf4j:slf4j-api:2.0.16")
     implementation("ch.qos.logback:logback-core:1.5.16")
     implementation("ch.qos.logback:logback-classic:1.5.16")

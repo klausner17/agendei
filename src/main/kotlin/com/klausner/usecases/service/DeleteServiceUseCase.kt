@@ -6,17 +6,14 @@ import java.util.UUID
 
 class DeleteServiceUseCase(
     private val serviceRepository: IServiceRepository,
-) : UseCase<DeleteServiceUseCase.Input, DeleteServiceUseCase.Output> {
+) : UseCase<DeleteServiceUseCase.Input, Boolean> {
 
-    override fun execute(input: Input): Result<Output> {
+    override fun execute(input: Input): Result<Boolean> {
         return serviceRepository
             .delete(input.id)
-            .map { Output() }
+            .map { true }
     }
 
     data class Input(val id: UUID)
 
-    data class Output {
-
-    }
 }
