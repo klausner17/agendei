@@ -33,7 +33,7 @@ jobs:
 
       - name: Enviar JAR para VPS
         run: |
-          scp build/libs/agendei.jar ${{ vars.VPS_USER }}@${{ secrets.VPS_HOST }}:${{ vars.VPS_TARGET_DIR }}/app.jar
+          scp build/libs/agendei.jar ${{ vars.VPS_USER }}@${{ vars.VPS_HOST }}:${{ vars.VPS_TARGET_DIR }}/app.jar
 
       - name: Executar script remoto na VPS
         run: |
