@@ -1,6 +1,7 @@
 plugins {
     kotlin("jvm") version "2.1.0"
     kotlin("plugin.serialization") version "2.1.0"
+    id("com.gradleup.shadow") version "8.3.8"
 }
 
 group = "com.klausner"
@@ -8,6 +9,7 @@ version = "1.0-SNAPSHOT"
 
 repositories {
     mavenCentral()
+    gradlePluginPortal()
     maven { url = uri("https://jitpack.io") }
 }
 
@@ -40,6 +42,15 @@ dependencies {
 
 tasks.test {
     useJUnitPlatform()
+}
+
+tasks.shadowJar {
+    manifest {
+        attributes["Main-Class"] = "com.klausner.MainKt"
+    }
+    archiveBaseName.set("agendei")
+    archiveClassifier.set("")
+    archiveVersion.set("")
 }
 
 java {
