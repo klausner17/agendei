@@ -3,6 +3,7 @@ package com.klausner
 import com.klausner.infraestructure.serializers.LocalDateTimeSerializer
 import com.klausner.infraestructure.serializers.UUIDSerializer
 import com.klausner.routes.professionalRoutes
+import com.klausner.routes.whatsappRoutes
 import io.ktor.serialization.kotlinx.json.json
 import io.ktor.server.application.install
 import io.ktor.server.engine.embeddedServer
@@ -34,6 +35,7 @@ fun main() {
             }
             route("/api/v1") {
                 professionalRoutes()
+                whatsappRoutes()
             }
         }
     }.start(wait = true)
