@@ -1,15 +1,15 @@
 package com.klausner.usecases.service
 
 import com.klausner.domains.Service
-import com.klausner.domains.valueobjects.Money
-import com.klausner.domains.valueobjects.MoneyFixed
 import com.klausner.repositories.service.IServiceRepository
 import com.klausner.usecases.UseCase
+import com.klausner.usecases.service.CreateServiceUseCase.Input
+import com.klausner.usecases.service.CreateServiceUseCase.Output
 import java.util.UUID
 
 class CreateServiceUseCase(
     private val serviceRepository: IServiceRepository,
-) : UseCase<CreateServiceUseCase.Input, CreateServiceUseCase.Output> {
+) : UseCase<Input, Output> {
 
     override fun execute(input: Input) = serviceRepository
         .create(input.toDomain())
@@ -25,14 +25,14 @@ class CreateServiceUseCase(
             id = UUID.randomUUID(),
             professionalId = professionalId,
             description = description,
-            price = MoneyFixed(price),
+            price = price,
         )
     }
 
     data class Output(
         val id: String,
         val description: String,
-        val price: Money,
+        val price: Int,
         val professionalId: String,
     ) {
 

@@ -13,6 +13,11 @@ fun <T> Result<Result<T>>.flatten(): Result<T> = this.fold(
     onFailure = { Result.failure(it) }
 )
 
+fun <T, R> Result<T>.flatMap(transform: (T) -> Result<R>): Result<R> = this.fold(
+    onSuccess = transform,
+    onFailure = { Result.failure(it) }
+)
+
 suspend inline fun RoutingContext.foldAndRespond(result: Result<Any>) {
     result.fold(
         onSuccess = { call.respond(it) },

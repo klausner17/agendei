@@ -33,7 +33,7 @@ dependencies {
     implementation("org.slf4j:slf4j-api:2.0.16")
     implementation("ch.qos.logback:logback-core:1.5.16")
     implementation("ch.qos.logback:logback-classic:1.5.16")
-    implementation("org.postgresql:postgresql:42.6.0")
+    implementation("org.xerial:sqlite-jdbc:3.49.1.0")
 
     testImplementation("io.ktor:ktor-server-test-host:$ktor_version")
     testImplementation(kotlin("test"))

@@ -17,5 +17,6 @@ data class Professional(
     val instagram: String? = null,
     val facebook: String? = null,
     val photo: String? = null,
-    val workHours: List<Interval>? = null
+    val workHours: List<Interval>? = null,
+    val slots: List<Interval>? = null
 ) : Domain

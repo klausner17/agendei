@@ -18,5 +18,6 @@ CREATE TABLE IF NOT EXISTS professional (
     instagram VARCHAR(100),
     facebook VARCHAR(100),
     photo VARCHAR(100),
-    work_hours VARCHAR(500)
+    work_hours VARCHAR(500),
+    slots VARCHAR(2000)
 );

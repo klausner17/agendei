@@ -3,7 +3,7 @@ package com.klausner.repositories.professional
 import com.klausner.database.columns.Slot
 import com.klausner.database.tables.ProfessionalTable
 import com.klausner.domains.Professional
-import kotlinx.serialization.json.Json
+import com.klausner.infraestructure.json
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.deleteWhere
@@ -13,12 +13,7 @@ import org.jetbrains.exposed.sql.update
 import java.util.UUID
 
 class ProfessionalRepository(
-    private val database: Database = Database.connect(
-        "jdbc:postgresql://localhost:5432/agendei",
-        driver = "org.postgresql.Driver",
-        user = "klausner.pinto",
-        password = "",
-    )
+    private val database: Database = Database.connect("jdbc:sqlite:./data.db", "org.sqlite.JDBC")
 ) : IProfessionalRepository {
 
     override fun create(obj: Professional): Result<Professional> {
@@ -42,14 +37,14 @@ class ProfessionalRepository(
                     it[instagram] = obj.instagram
                     it[facebook] = obj.facebook
                     it[photo] = obj.photo
-                    it[workHours] = Json.encodeToString(obj.workHours?.map { interval -> Slot.fromDomain(interval) })
+                    it[workHours] = json.encodeToString(obj.workHours?.map { interval -> Slot.fromDomain(interval) })
                 }
 
                 return@transaction ProfessionalTable.select(ProfessionalTable.columns)
                     .where { ProfessionalTable.id eq obj.id }
                     .map { row -> ProfessionalTable.toDomain(row) }
                     .singleOrNull()
-            }!!
+            } ?: error(PROFESSIONAL_NOT_FOUND)
         }
     }
 
@@ -94,6 +89,7 @@ class ProfessionalRepository(
                     it[facebook] = obj.facebook
                     it[photo] = obj.photo
                     it[workHours] = obj.workHours.toString()
+                    it[slots] = obj.slots.toString()
                 }
 
                 return@transaction ProfessionalTable.select(ProfessionalTable.columns)

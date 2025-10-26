@@ -1,23 +1,13 @@
 package com.klausner.domains
 
-import com.klausner.domains.valueobjects.Interval
-import com.klausner.domains.valueobjects.Money
+import kotlinx.serialization.Contextual
+import kotlinx.serialization.Serializable
 import java.util.UUID
 
+@Serializable
 data class Service(
-    val id: UUID,
-    val professionalId: UUID,
+    @Contextual val id: UUID,
+    @Contextual val professionalId: UUID,
     val description: String,
-    val price: Money,
-    val isFree: Boolean = false,
-    val slots: List<Interval>? = null,
+    @Contextual val price: Int,
 ) : Domain
-
-/*
-id: uuid
-id da loja: uuid
-ids dos pretadores: List<uuid (fk)>
-descrição: string
-valor: string
-slots: list<Intervalo>
- */

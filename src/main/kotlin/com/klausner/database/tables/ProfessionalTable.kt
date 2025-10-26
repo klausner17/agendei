@@ -3,6 +3,7 @@ package com.klausner.database.tables
 import com.klausner.domains.Professional
 import com.klausner.domains.valueobjects.Address
 import com.klausner.domains.valueobjects.Phone
+import com.klausner.infraestructure.json
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.Table
 
@@ -27,6 +28,7 @@ object ProfessionalTable : Table() {
     val facebook = varchar(name = "facebook", length = 100).nullable()
     val photo = varchar(name = "photo", length = 100).nullable()
     val workHours = varchar(name = "work_hours", length = 500).nullable()
+    val slots = varchar(name = "slots", length = 2000).nullable()
 
     fun toDomain(row: ResultRow): Professional {
         return Professional(
@@ -50,7 +52,8 @@ object ProfessionalTable : Table() {
             instagram = row[instagram],
             facebook = row[facebook],
             photo = row[photo],
-            workHours = null
+            workHours = row[workHours]?.let { json.decodeFromString(it) },
+            slots = row[slots]?.let { json.decodeFromString(it) }
         )
     }
 }

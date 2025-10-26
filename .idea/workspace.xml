@@ -5,8 +5,26 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e84f34c2-a87c-4153-8e7e-b3d0bd41f3c1" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/kotlin/com/klausner/database/tables/ServiceTable.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/kotlin/com/klausner/infraestructure/json.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/kotlin/com/klausner/repositories/service/ServiceRepository.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/kotlin/com/klausner/usecases/professional/UpdateProfessionalSlotUseCase.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/AugmentWebviewStateStore.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/AugmentWebviewStateStore.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/com/klausner/routes/WhatsAppRoutes.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/com/klausner/routes/WhatsAppRoutes.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/migrations/INITIAL_SCRIPT.sql" beforeDir="false" afterPath="$PROJECT_DIR$/migrations/INITIAL_SCRIPT.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/com/klausner/Main.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/com/klausner/Main.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/com/klausner/database/tables/ProfessionalTable.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/com/klausner/database/tables/ProfessionalTable.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/com/klausner/domains/Professional.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/com/klausner/domains/Professional.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/com/klausner/domains/Service.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/com/klausner/domains/Service.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/com/klausner/domains/valueobjects/Interval.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/com/klausner/domains/valueobjects/Interval.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/com/klausner/domains/valueobjects/Money.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/com/klausner/domains/valueobjects/Money.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/com/klausner/infraestructure/ResultExtesions.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/com/klausner/infraestructure/ResultExtesions.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/com/klausner/repositories/professional/ProfessionalRepository.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/com/klausner/repositories/professional/ProfessionalRepository.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/com/klausner/routes/ProfessionalRoutes.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/com/klausner/routes/ProfessionalRoutes.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/com/klausner/usecases/service/CreateServiceUseCase.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/com/klausner/usecases/service/CreateServiceUseCase.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/logback.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/logback.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -27,8 +45,8 @@
         <option value="Kotlin Data Class" />
         <option value="JUnit5 Test Class" />
         <option value="Kotlin Interface" />
-        <option value="Kotlin Class" />
         <option value="Kotlin File" />
+        <option value="Kotlin Class" />
       </list>
     </option>
   </component>
@@ -47,6 +65,7 @@
     &quot;accountId&quot;: &quot;8a9e6a3b-37cc-4697-8a8b-fa55ae6a186a&quot;
   }
 }</component>
+  <component name="GradleScriptDefinitionsStorage" workingDir="$PROJECT_DIR$" gradleHome="$USER_HOME$/.gradle/wrapper/dists/gradle-8.8-bin/dl7vupf4psengwqhwktix4v1/gradle-8.8" javaHome="/Library/Java/JavaVirtualMachines/temurin-11.jdk/Contents/Home" gradleVersion="8.8" />
   <component name="ProblemsViewState">
     <option name="selectedTabId" value="DEPENDENCY_CHECKER_PROBLEMS_TAB" />
   </component>
@@ -54,7 +73,6 @@
   &quot;associatedIndex&quot;: 0
 }</component>
   <component name="ProjectId" id="2sxcZnCaE5vCia2YNTt7SWZgTcp" />
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -66,8 +84,11 @@
     "Gradle.CreateProfessionalUseCaseTest.given an input when use case then create a professional.executor": "Run",
     "Gradle.Download Sources.executor": "Run",
     "Gradle.PhoneTest.given a valid phone string when create a phone object then return a phone object.executor": "Run",
+    "Gradle.agendei [:com.klausner.MainKt.main()].executor": "Run",
     "Kotlin.MainKt.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary": "JUnit5",
     "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5": "",
@@ -76,7 +97,7 @@
     "project.structure.last.edited": "Modules",
     "project.structure.proportion": "0.15",
     "project.structure.side.proportion": "0.28456473",
-    "settings.editor.selected.configurable": "preferences.pluginManager"
+    "settings.editor.selected.configurable": "preferences.lookFeel"
   }
 }]]></component>
   <component name="RecentsManager">
@@ -102,6 +123,7 @@
       <recent name="com.klausner.usecases" />
     </key>
     <key name="CopyKotlinDeclarationDialog.RECENTS_KEY">
+      <recent name="com.klausner.usecases.professional" />
       <recent name="com.klausner.repositories" />
     </key>
   </component>
@@ -218,5 +240,16 @@
       <updated>1739400724585</updated>
     </task>
     <servers />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="kotlin-line">
+          <url>file://$PROJECT_DIR$/src/main/kotlin/com/klausner/usecases/professional/CreateProfessionalUseCase.kt</url>
+          <line>19</line>
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>
