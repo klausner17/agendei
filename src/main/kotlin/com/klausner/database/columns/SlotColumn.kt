@@ -5,7 +5,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class Slot(
-    val starTime: String,
+    val startTime: String,
     val endTime: String,
     val daysOfWeek: List<String>? = null,
 ) {
@@ -14,7 +14,7 @@ data class Slot(
 
         fun fromDomain(interval: Interval): Slot {
             return Slot(
-                starTime = interval.startTime.toString(),
+                startTime = interval.startTime.toString(),
                 endTime = interval.endTime.toString(),
                 daysOfWeek = interval.daysOfWeek?.map { it.toString() }
             )

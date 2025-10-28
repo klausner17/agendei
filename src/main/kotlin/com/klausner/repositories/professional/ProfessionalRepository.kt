@@ -19,7 +19,7 @@ class ProfessionalRepository(
     override fun create(obj: Professional): Result<Professional> {
         return runCatching {
             transaction(database) {
-                ProfessionalTable.insert {
+                val result = ProfessionalTable.insert {
                     it[id] = obj.id
                     it[storeId] = obj.storeId
                     it[professionalName] = obj.name
@@ -38,13 +38,11 @@ class ProfessionalRepository(
                     it[facebook] = obj.facebook
                     it[photo] = obj.photo
                     it[workHours] = json.encodeToString(obj.workHours?.map { interval -> Slot.fromDomain(interval) })
-                }
+                }.resultedValues
 
-                return@transaction ProfessionalTable.select(ProfessionalTable.columns)
-                    .where { ProfessionalTable.id eq obj.id }
-                    .map { row -> ProfessionalTable.toDomain(row) }
-                    .singleOrNull()
-            } ?: error(PROFESSIONAL_NOT_FOUND)
+                val row = result?.get(0) ?: error("Error creating professional")
+                ProfessionalTable.toDomain(row)
+            }
         }
     }
 

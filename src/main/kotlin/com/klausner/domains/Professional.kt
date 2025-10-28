@@ -6,7 +6,7 @@ import com.klausner.domains.valueobjects.Phone
 import java.util.UUID
 
 data class Professional(
-    val id: UUID,
+    val id: UUID = UUID.randomUUID(),
     val storeId: UUID? = null,
     val name: String,
     val bio: String? = null,
