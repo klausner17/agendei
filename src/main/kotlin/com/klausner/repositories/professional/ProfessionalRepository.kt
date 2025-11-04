@@ -12,9 +12,7 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.update
 import java.util.UUID
 
-class ProfessionalRepository(
-    private val database: Database = Database.connect("jdbc:sqlite:./data.db", "org.sqlite.JDBC")
-) : IProfessionalRepository {
+class ProfessionalRepository(private val database: Database) : IProfessionalRepository {
 
     override fun create(obj: Professional): Result<Professional> {
         return runCatching {

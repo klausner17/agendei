@@ -10,9 +10,7 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.update
 import java.util.UUID
 
-class ServiceRepository(
-    private val database: Database = Database.connect("jdbc:sqlite:/data/data.db", "org.sqlite.JDBC")
-) : IServiceRepository {
+class ServiceRepository(private val database: Database) : IServiceRepository {
 
     override fun create(obj: Service): Result<Service> {
         return runCatching {

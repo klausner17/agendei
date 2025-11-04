@@ -3,6 +3,7 @@ package com.klausner
 import com.fasterxml.jackson.databind.PropertyNamingStrategies
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
+import com.klausner.infraestructure.mainModule
 import com.klausner.routes.config
 import com.klausner.routes.professionalRoutes
 import com.klausner.routes.whatsappRoutes
@@ -16,9 +17,13 @@ import io.ktor.server.response.respond
 import io.ktor.server.routing.get
 import io.ktor.server.routing.route
 import io.ktor.server.routing.routing
+import org.koin.core.context.startKoin
 
 fun main() {
     embeddedServer(factory = Netty, 8080) {
+        startKoin {
+            modules(mainModule)
+        }
         install(ContentNegotiation) {
             jackson {
                 registerModule(JavaTimeModule())

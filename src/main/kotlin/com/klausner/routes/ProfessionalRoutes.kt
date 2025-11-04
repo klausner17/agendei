@@ -1,8 +1,6 @@
 package com.klausner.routes
 
 import com.klausner.infraestructure.foldAndRespond
-import com.klausner.repositories.professional.ProfessionalRepository
-import com.klausner.repositories.service.ServiceRepository
 import com.klausner.usecases.professional.CreateProfessionalUseCase
 import com.klausner.usecases.professional.GetProfessionalUseCase
 import com.klausner.usecases.service.CreateServiceUseCase
@@ -11,14 +9,14 @@ import io.ktor.server.routing.Route
 import io.ktor.server.routing.get
 import io.ktor.server.routing.post
 import io.ktor.server.routing.route
+import org.koin.java.KoinJavaComponent.getKoin
 import java.util.UUID
 
 fun Route.professionalRoutes() {
-    val professionalRepository = ProfessionalRepository()
-    val serviceRepository = ServiceRepository()
-    val createProfessionalUseCase = CreateProfessionalUseCase(professionalRepository)
-    val getProfessionalUseCase = GetProfessionalUseCase(professionalRepository)
-    val createServiceUseCase = CreateServiceUseCase(serviceRepository)
+
+    val createProfessionalUseCase:CreateProfessionalUseCase by getKoin().inject()
+    val getProfessionalUseCase: GetProfessionalUseCase by getKoin().inject()
+    val createServiceUseCase: CreateServiceUseCase by getKoin().inject()
 
     route("/professionals") {
         post {
