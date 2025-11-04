@@ -1,9 +1,7 @@
 package com.klausner.domains.valueobjects
 
 import com.klausner.domains.ValueObject
-import kotlinx.serialization.Serializable
 
-@Serializable
 data class Phone(
     val countryCode: String,
     val areaCode: String,

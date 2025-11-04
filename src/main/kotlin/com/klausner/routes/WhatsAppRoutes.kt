@@ -1,7 +1,6 @@
 package com.klausner.routes
 
 import io.ktor.http.HttpStatusCode
-import io.ktor.server.request.receive
 import io.ktor.server.request.receiveText
 import io.ktor.server.response.respond
 import io.ktor.server.response.respondText
@@ -9,7 +8,6 @@ import io.ktor.server.routing.Route
 import io.ktor.server.routing.get
 import io.ktor.server.routing.post
 import io.ktor.server.routing.route
-import kotlinx.serialization.json.JsonObject
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -41,4 +39,4 @@ fun Route.whatsappRoutes() {
     }
 }
 
-val logger: Logger = LoggerFactory.getLogger("WhatsAppRoutes")
+private val logger: Logger = LoggerFactory.getLogger("WhatsAppRoutes")

@@ -1,13 +1,11 @@
 package com.klausner.domains.valueobjects
 
 import com.klausner.domains.ValueObject
-import kotlinx.serialization.Serializable
 
 enum class Currency(val symbol: String, val divisor: Int) { BRL("R$", 100) }
 
 enum class MoneyType { FIXED, RANGED }
 
-@Serializable
 abstract class Money(
     val currency: Currency,
     val type: MoneyType,

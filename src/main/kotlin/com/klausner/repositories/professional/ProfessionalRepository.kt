@@ -3,7 +3,7 @@ package com.klausner.repositories.professional
 import com.klausner.database.columns.Slot
 import com.klausner.database.tables.ProfessionalTable
 import com.klausner.domains.Professional
-import com.klausner.infraestructure.json
+import com.klausner.infraestructure.objectMapper
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.deleteWhere
@@ -37,7 +37,9 @@ class ProfessionalRepository(
                     it[instagram] = obj.instagram
                     it[facebook] = obj.facebook
                     it[photo] = obj.photo
-                    it[workHours] = json.encodeToString(obj.workHours?.map { interval -> Slot.fromDomain(interval) })
+                    it[workHours] = objectMapper.writeValueAsString(
+                        obj.workHours?.map { interval -> Slot.fromDomain(interval) }
+                    )
                 }.resultedValues
 
                 val row = result?.get(0) ?: error("Error creating professional")

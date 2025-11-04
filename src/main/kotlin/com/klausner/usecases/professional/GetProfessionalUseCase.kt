@@ -7,8 +7,6 @@ import com.klausner.repositories.professional.IProfessionalRepository
 import com.klausner.usecases.UseCase
 import com.klausner.usecases.professional.GetProfessionalUseCase.Input
 import com.klausner.usecases.professional.GetProfessionalUseCase.Output
-import kotlinx.serialization.Contextual
-import kotlinx.serialization.Serializable
 import java.util.UUID
 
 class GetProfessionalUseCase(
@@ -22,9 +20,8 @@ class GetProfessionalUseCase(
         val professionalId: UUID
     )
 
-    @Serializable
     data class Output(
-        @Contextual val id: UUID,
+        val id: UUID,
         val name: String,
         val bio: String?,
         val email: String?,

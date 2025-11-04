@@ -1,9 +1,10 @@
 package com.klausner.database.tables
 
+import com.fasterxml.jackson.module.kotlin.readValue
 import com.klausner.domains.Professional
 import com.klausner.domains.valueobjects.Address
 import com.klausner.domains.valueobjects.Phone
-import com.klausner.infraestructure.json
+import com.klausner.infraestructure.objectMapper
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.Table
 
@@ -52,8 +53,8 @@ object ProfessionalTable : Table() {
             instagram = row[instagram],
             facebook = row[facebook],
             photo = row[photo],
-            workHours = row[workHours]?.let { json.decodeFromString(it) },
-            slots = row[slots]?.let { json.decodeFromString(it) }
+            workHours = row[workHours]?.let { objectMapper.readValue(it) },
+            slots = row[slots]?.let { objectMapper.readValue(it) }
         )
     }
 }

@@ -8,13 +8,9 @@ import com.klausner.repositories.professional.IProfessionalRepository
 import com.klausner.usecases.UseCase
 import com.klausner.usecases.professional.CreateProfessionalUseCase.Input
 import com.klausner.usecases.professional.CreateProfessionalUseCase.Output
-import kotlinx.serialization.Contextual
-import kotlinx.serialization.Serializable
 import java.util.UUID
 
-class CreateProfessionalUseCase(
-    private val repository: IProfessionalRepository,
-) : UseCase<Input, Output> {
+class CreateProfessionalUseCase(private val repository: IProfessionalRepository) : UseCase<Input, Output> {
 
     override fun execute(input: Input): Result<Output> {
         return repository.create(inputToDomain(input))
@@ -27,7 +23,6 @@ class CreateProfessionalUseCase(
         name = domain.name,
         bio = domain.bio,
         address = domain.address,
-        password = domain.password,
         phone = domain.phone,
         instagram = domain.instagram,
         facebook = domain.facebook,
@@ -48,7 +43,6 @@ class CreateProfessionalUseCase(
         workHours = input.workHours ?: emptyList()
     )
 
-    @Serializable
     data class Input(
         val name: String,
         val email: String? = null,
@@ -62,14 +56,12 @@ class CreateProfessionalUseCase(
         val workHours: List<Interval>? = null
     )
 
-    @Serializable
     data class Output(
-        @Contextual val id: UUID,
-        @Contextual val storeId: UUID?,
+        val id: UUID,
+        val storeId: UUID?,
         val name: String,
         val bio: String?,
         val address: Address?,
-        val password: String?,
         val phone: Phone?,
         val instagram: String?,
         val facebook: String?,
