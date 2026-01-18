@@ -3,7 +3,6 @@ package com.klausner.routes
 import com.klausner.infraestructure.foldAndRespond
 import com.klausner.usecases.professional.CreateProfessionalUseCase
 import com.klausner.usecases.professional.GetProfessionalUseCase
-import com.klausner.usecases.service.CreateServiceUseCase
 import io.ktor.server.request.receive
 import io.ktor.server.routing.Route
 import io.ktor.server.routing.get
@@ -13,10 +12,8 @@ import org.koin.java.KoinJavaComponent.getKoin
 import java.util.UUID
 
 fun Route.professionalRoutes() {
-
-    val createProfessionalUseCase:CreateProfessionalUseCase by getKoin().inject()
+    val createProfessionalUseCase: CreateProfessionalUseCase by getKoin().inject()
     val getProfessionalUseCase: GetProfessionalUseCase by getKoin().inject()
-
 
     route("/professionals") {
         post {
@@ -28,7 +25,6 @@ fun Route.professionalRoutes() {
                 val id = UUID.fromString(call.parameters["id"]!!)
                 foldAndRespond(getProfessionalUseCase.execute(GetProfessionalUseCase.Input(id)))
             }
-
         }
     }
 }

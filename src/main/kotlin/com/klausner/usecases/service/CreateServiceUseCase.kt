@@ -10,23 +10,28 @@ import java.util.UUID
 class CreateServiceUseCase(
     private val serviceRepository: IServiceRepository,
 ) : UseCase<Input, Output> {
-
-    override fun execute(input: Input) = serviceRepository
-        .create(input.toDomain())
-        .map(Output::fromDomain)
+    override fun execute(input: Input) =
+        serviceRepository
+            .create(input.toDomain())
+            .map(Output::fromDomain)
 
     data class Input(
         val name: String,
+        val companyId: UUID,
         val professionalId: UUID,
         val description: String,
-        val price: Int = 0,
+        val price: Int,
+        val durationInMinutes: Int,
     ) {
-        fun toDomain() = Service(
-            id = UUID.randomUUID(),
-            professionalId = professionalId,
-            description = description,
-            price = price,
-        )
+        fun toDomain() =
+            Service(
+                id = UUID.randomUUID(),
+                companyId = UUID.randomUUID(),
+                professionalId = professionalId,
+                description = description,
+                price = price,
+                durationInMinutes = durationInMinutes,
+            )
     }
 
     data class Output(
@@ -35,16 +40,14 @@ class CreateServiceUseCase(
         val price: Int,
         val professionalId: String,
     ) {
-
         companion object {
-            fun fromDomain(service: Service): Output {
-                return Output(
+            fun fromDomain(service: Service): Output =
+                Output(
                     id = service.id.toString(),
                     description = service.description,
                     price = service.price,
-                    professionalId = service.professionalId.toString()
+                    professionalId = service.professionalId.toString(),
                 )
-            }
         }
     }
 }

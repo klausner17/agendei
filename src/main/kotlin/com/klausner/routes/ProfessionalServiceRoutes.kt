@@ -7,7 +7,6 @@ import io.ktor.server.routing.Route
 import io.ktor.server.routing.post
 import io.ktor.server.routing.route
 import org.koin.java.KoinJavaComponent.getKoin
-import kotlin.getValue
 
 fun Route.professionalServiceRoutes() {
     val createServiceUseCase: CreateServiceUseCase by getKoin().inject()

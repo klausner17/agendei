@@ -7,4 +7,5 @@ data class Service(
     val professionalId: UUID,
     val description: String,
     val price: Int,
+    val durationInMinutes: Int,
 ) : Domain

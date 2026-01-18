@@ -10,14 +10,15 @@ import com.klausner.usecases.professional.GetProfessionalUseCase.Output
 import java.util.UUID
 
 class GetProfessionalUseCase(
-    private val professionalRepository: IProfessionalRepository
+    private val professionalRepository: IProfessionalRepository,
 ) : UseCase<Input, Output> {
-
-    override fun execute(input: Input) = professionalRepository.find(input.professionalId)
-        .map { Output.fromDomain(it) }
+    override fun execute(input: Input) =
+        professionalRepository
+            .find(input.professionalId)
+            .map { Output.fromDomain(it) }
 
     data class Input(
-        val professionalId: UUID
+        val professionalId: UUID,
     )
 
     data class Output(
@@ -30,12 +31,11 @@ class GetProfessionalUseCase(
         val instagram: String?,
         val facebook: String?,
         val photo: String?,
-        val workHours: List<Interval>?
+        val workHours: List<Interval>?,
     ) {
-
         companion object {
-            fun fromDomain(professional: com.klausner.domains.Professional): Output {
-                return Output(
+            fun fromDomain(professional: com.klausner.domains.Professional): Output =
+                Output(
                     id = professional.id,
                     name = professional.name,
                     bio = professional.bio,
@@ -45,9 +45,8 @@ class GetProfessionalUseCase(
                     instagram = professional.instagram,
                     facebook = professional.facebook,
                     photo = professional.photo,
-                    workHours = professional.workHours
+                    workHours = professional.workHours,
                 )
-            }
         }
     }
 }
