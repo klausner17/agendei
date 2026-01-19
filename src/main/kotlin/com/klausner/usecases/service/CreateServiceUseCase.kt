@@ -26,7 +26,6 @@ class CreateServiceUseCase(
         fun toDomain() =
             Service(
                 id = UUID.randomUUID(),
-                companyId = UUID.randomUUID(),
                 professionalId = professionalId,
                 description = description,
                 price = price,

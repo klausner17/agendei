@@ -18,7 +18,6 @@ class ServiceRepository(
             transaction(database) {
                 ServiceTable.insert {
                     it[id] = obj.id
-                    it[companyId] = obj.companyId
                     it[professionalId] = obj.professionalId
                     it[description] = obj.description
                     it[price] = obj.price

@@ -5,17 +5,24 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e84f34c2-a87c-4153-8e7e-b3d0bd41f3c1" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/ktlint-plugin.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/migrations/CREATE_USERS_TABLE.sql" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/kotlin/com/klausner/database/tables/UserTable.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/kotlin/com/klausner/domains/User.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/kotlin/com/klausner/infraestructure/DatabaseMigration.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/kotlin/com/klausner/repositories/user/IUserRepository.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/kotlin/com/klausner/repositories/user/UserRepository.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/kotlin/com/klausner/routes/LoginRoutes.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/kotlin/com/klausner/services/GoogleAuthService.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/kotlin/com/klausner/services/JwtService.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/kotlin/com/klausner/usecases/auth/GoogleAuthUseCase.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/AugmentWebviewStateStore.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/AugmentWebviewStateStore.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/com/klausner/database/tables/ServiceTable.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/com/klausner/database/tables/ServiceTable.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/com/klausner/domains/Service.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/com/klausner/domains/Service.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/com/klausner/infraestructure/ResultExtesions.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/com/klausner/infraestructure/ResultExtesions.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/com/klausner/Main.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/com/klausner/Main.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/com/klausner/infraestructure/DI.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/com/klausner/infraestructure/DI.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/kotlin/com/klausner/repositories/service/ServiceRepository.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/com/klausner/repositories/service/ServiceRepository.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/com/klausner/routes/ProfessionalRoutes.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/com/klausner/routes/ProfessionalRoutes.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/com/klausner/routes/ProfessionalServiceRoutes.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/com/klausner/routes/ProfessionalServiceRoutes.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/com/klausner/routes/StatusPage.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/com/klausner/routes/StatusPage.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/com/klausner/usecases/professional/GetProfessionalUseCase.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/com/klausner/usecases/professional/GetProfessionalUseCase.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/kotlin/com/klausner/usecases/service/CreateServiceUseCase.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/com/klausner/usecases/service/CreateServiceUseCase.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/logback.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/logback.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -56,9 +63,9 @@
         <option value="Kotlin Data Class" />
         <option value="JUnit5 Test Class" />
         <option value="Kotlin Interface" />
-        <option value="Kotlin File" />
         <option value="Kotlin Class" />
         <option value="Kotlin Object" />
+        <option value="Kotlin File" />
       </list>
     </option>
   </component>
@@ -216,6 +223,9 @@
     <configuration name="MainKt" type="JetRunConfigurationType" temporary="true" nameIsGenerated="true">
       <option name="ALTERNATIVE_JRE_PATH" value="java11" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
+      <envs>
+        <env name="GOOGLE_CLIENT_SECRET" value="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" />
+      </envs>
       <option name="MAIN_CLASS_NAME" value="com.klausner.MainKt" />
       <module name="agendei.main" />
       <shortenClasspath name="NONE" />
