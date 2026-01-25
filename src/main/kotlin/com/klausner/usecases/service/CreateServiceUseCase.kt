@@ -17,9 +17,8 @@ class CreateServiceUseCase(
 
     data class Input(
         val name: String,
-        val companyId: UUID,
         val professionalId: UUID,
-        val description: String,
+        val description: String?,
         val price: Int,
         val durationInMinutes: Int,
     ) {
@@ -27,6 +26,7 @@ class CreateServiceUseCase(
             Service(
                 id = UUID.randomUUID(),
                 professionalId = professionalId,
+                name = name,
                 description = description,
                 price = price,
                 durationInMinutes = durationInMinutes,
@@ -35,7 +35,8 @@ class CreateServiceUseCase(
 
     data class Output(
         val id: String,
-        val description: String,
+        val name: String,
+        val description: String?,
         val price: Int,
         val professionalId: String,
     ) {
@@ -43,6 +44,7 @@ class CreateServiceUseCase(
             fun fromDomain(service: Service): Output =
                 Output(
                     id = service.id.toString(),
+                    name = service.name,
                     description = service.description,
                     price = service.price,
                     professionalId = service.professionalId.toString(),

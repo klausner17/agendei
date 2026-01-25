@@ -25,20 +25,20 @@ class GetServicesByProfessionalIdUseCase(
         data class ServiceOutput(
             val id: UUID,
             val professionalId: UUID,
-            val description: String,
+            val description: String?,
             val price: Int,
             val durationInMinutes: Int,
         ) {
             companion object {
-                fun fromDomain(service: Service) = ServiceOutput(
-                    id = service.id,
-                    professionalId = service.professionalId,
-                    description = service.description,
-                    price = service.price,
-                    durationInMinutes = service.durationInMinutes,
-                )
+                fun fromDomain(service: Service) =
+                    ServiceOutput(
+                        id = service.id,
+                        professionalId = service.professionalId,
+                        description = service.description,
+                        price = service.price,
+                        durationInMinutes = service.durationInMinutes,
+                    )
             }
         }
     }
 }
-

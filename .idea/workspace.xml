@@ -5,23 +5,19 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e84f34c2-a87c-4153-8e7e-b3d0bd41f3c1" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/prompts/USE_CASE_GENERATION.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/kotlin/com/klausner/usecases/professional/GetAllProfessionalsUseCase.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/kotlin/com/klausner/usecases/service/GetServicesByProfessionalIdUseCase.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/AugmentWebviewStateStore.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/AugmentWebviewStateStore.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/kotlin/com/klausner/Main.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/com/klausner/Main.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/kotlin/com/klausner/database/tables/ProfessionalTable.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/com/klausner/database/tables/ProfessionalTable.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/com/klausner/database/tables/ServiceTable.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/com/klausner/database/tables/ServiceTable.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/com/klausner/domains/Service.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/com/klausner/domains/Service.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/kotlin/com/klausner/infraestructure/DI.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/com/klausner/infraestructure/DI.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/com/klausner/infraestructure/ResultExtesions.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/com/klausner/infraestructure/ResultExtesions.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/com/klausner/repositories/professional/IProfessionalRepository.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/com/klausner/repositories/professional/IProfessionalRepository.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/com/klausner/repositories/professional/ProfessionalRepository.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/com/klausner/repositories/professional/ProfessionalRepository.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/com/klausner/repositories/service/IServiceRepository.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/com/klausner/repositories/service/IServiceRepository.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/com/klausner/infraestructure/DatabaseMigration.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/com/klausner/infraestructure/DatabaseMigration.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/kotlin/com/klausner/repositories/service/ServiceRepository.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/com/klausner/repositories/service/ServiceRepository.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/com/klausner/routes/LoginRoutes.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/com/klausner/routes/LoginRoutes.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/kotlin/com/klausner/routes/ProfessionalRoutes.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/com/klausner/routes/ProfessionalRoutes.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/com/klausner/services/JwtService.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/com/klausner/services/JwtService.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/com/klausner/usecases/professional/CreateProfessionalUseCase.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/com/klausner/usecases/professional/CreateProfessionalUseCase.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/com/klausner/usecases/service/DeleteServiceUseCase.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/com/klausner/usecases/service/DeleteServiceUseCase.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/com/klausner/usecases/service/CreateServiceUseCase.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/com/klausner/usecases/service/CreateServiceUseCase.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/com/klausner/usecases/service/GetServicesByProfessionalIdUseCase.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/com/klausner/usecases/service/GetServicesByProfessionalIdUseCase.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -263,16 +259,5 @@
       <updated>1739400724585</updated>
     </task>
     <servers />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="kotlin-line">
-          <url>file://$PROJECT_DIR$/src/main/kotlin/com/klausner/routes/LoginRoutes.kt</url>
-          <line>41</line>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>

@@ -9,7 +9,7 @@ import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.Table
 import java.util.UUID
 
-object ProfessionalTable : Table() {
+object ProfessionalTable : Table("professionals") {
     val id = varchar(name = "id", length = 36)
     val storeId = uuid(name = "store_id").nullable()
     val professionalName = varchar(name = "name", length = 100)

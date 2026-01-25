@@ -60,9 +60,6 @@ fun main() {
         install(Authentication) { config() }
 
         routing {
-            get("/hello") {
-                call.respond("Hello World!")
-            }
             loginRoutes()
             authenticate("jwt-auth") {
                 route("/api/v1") {

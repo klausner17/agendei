@@ -5,7 +5,8 @@ import java.util.UUID
 data class Service(
     val id: UUID,
     val professionalId: UUID,
-    val description: String,
+    val name: String,
+    val description: String?,
     val price: Int,
     val durationInMinutes: Int,
 ) : Domain

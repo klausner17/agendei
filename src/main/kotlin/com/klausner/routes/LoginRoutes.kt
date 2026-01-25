@@ -37,7 +37,7 @@ fun AuthenticationConfig.config() {
 fun Route.loginRoutes() {
     val googleAuthUseCase: GoogleAuthUseCase by getKoin().inject()
 
-    post("/api/auth/google") {
+    post("/api/v1/auth/google") {
         try {
             val request = call.receive<GoogleAuthRequest>()
 
