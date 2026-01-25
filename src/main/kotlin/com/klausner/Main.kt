@@ -29,9 +29,10 @@ import org.koin.core.context.startKoin
 
 fun main() {
     embeddedServer(factory = Netty, 8080) {
-        val koinApp = startKoin {
-            modules(mainModule)
-        }
+        val koinApp =
+            startKoin {
+                modules(mainModule)
+            }
 
         // Executar migrations
         val database = koinApp.koin.get<Database>()
@@ -45,6 +46,7 @@ fun main() {
         }
         install(CORS) {
             allowHost("localhost:3001")
+            allowHost("localhost:3000")
             allowMethod(HttpMethod.Get)
             allowMethod(HttpMethod.Post)
             allowMethod(HttpMethod.Put)

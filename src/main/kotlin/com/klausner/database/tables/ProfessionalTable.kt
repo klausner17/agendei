@@ -7,9 +7,10 @@ import com.klausner.domains.valueobjects.Phone
 import com.klausner.infraestructure.objectMapper
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.Table
+import java.util.UUID
 
 object ProfessionalTable : Table() {
-    val id = uuid(name = "id")
+    val id = varchar(name = "id", length = 36)
     val storeId = uuid(name = "store_id").nullable()
     val professionalName = varchar(name = "name", length = 100)
     val bio = text(name = "bio").nullable()
@@ -31,30 +32,31 @@ object ProfessionalTable : Table() {
     val workHours = varchar(name = "work_hours", length = 500).nullable()
     val slots = varchar(name = "slots", length = 2000).nullable()
 
-    fun toDomain(row: ResultRow): Professional {
-        return Professional(
-            id = row[id],
+    fun toDomain(row: ResultRow): Professional =
+        Professional(
+            id = UUID.fromString(row[id]),
             storeId = row[storeId],
             name = row[professionalName],
             bio = row[bio],
             email = row[email],
             password = row[password],
-            address = Address.PossibleAddress(
-                street = row[street],
-                number = row[houseNumber],
-                complement = row[complement],
-                neighborhood = row[neighborhood],
-                city = row[city],
-                state = row[state],
-                country = row[country],
-                zipCode = row[zipCode]
-            ).toAddressOrNull(),
+            address =
+                Address
+                    .PossibleAddress(
+                        street = row[street],
+                        number = row[houseNumber],
+                        complement = row[complement],
+                        neighborhood = row[neighborhood],
+                        city = row[city],
+                        state = row[state],
+                        country = row[country],
+                        zipCode = row[zipCode],
+                    ).toAddressOrNull(),
             phone = row[phone]?.let { Phone.fromString(it, row[phoneIsWhatsApp] ?: false) },
             instagram = row[instagram],
             facebook = row[facebook],
             photo = row[photo],
             workHours = row[workHours]?.let { objectMapper.readValue(it) },
-            slots = row[slots]?.let { objectMapper.readValue(it) }
+            slots = row[slots]?.let { objectMapper.readValue(it) },
         )
-    }
 }

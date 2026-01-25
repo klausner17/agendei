@@ -1,8 +1,10 @@
 package com.klausner.infraestructure
 
 import com.klausner.routes.ErrorResponse
+import io.ktor.http.HttpStatusCode
 import io.ktor.server.response.respond
 import io.ktor.server.routing.RoutingContext
+import org.apache.http.HttpStatus
 
 fun <T> T.success(): Result<T> = Result.success(this)
 
@@ -22,7 +24,13 @@ fun <T, R> Result<T>.flatMap(transform: (T) -> Result<R>): Result<R> =
 
 suspend inline fun RoutingContext.foldAndRespond(result: Result<Any>) {
     result.fold(
-        onSuccess = { call.respond(it) },
+        onSuccess = {
+            if (it is List<*> && it.isEmpty()) {
+                call.respond(HttpStatusCode.NoContent)
+            } else {
+                call.respond(it)
+            }
+        },
         onFailure = {
             call.respond(
                 ErrorResponse(

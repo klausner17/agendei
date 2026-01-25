@@ -11,9 +11,11 @@ import com.klausner.services.JwtService
 import com.klausner.usecases.auth.GoogleAuthUseCase
 import com.klausner.usecases.professional.CreateProfessionalUseCase
 import com.klausner.usecases.professional.DeleteProfessionalUseCase
+import com.klausner.usecases.professional.GetAllProfessionalsUseCase
 import com.klausner.usecases.professional.GetProfessionalUseCase
 import com.klausner.usecases.professional.UpdateProfessionalSlotUseCase
 import com.klausner.usecases.professional.UpdateProfessionalUseCase
+import com.klausner.usecases.service.GetServicesByProfessionalIdUseCase
 import org.jetbrains.exposed.sql.Database
 import org.koin.dsl.bind
 import org.koin.dsl.module
@@ -42,8 +44,10 @@ val mainModule = module {
     // use cases
     single { CreateProfessionalUseCase(get()) }
     single { GetProfessionalUseCase(get()) }
+    single { GetAllProfessionalsUseCase(get()) }
     single { UpdateProfessionalUseCase(get()) }
     single { DeleteProfessionalUseCase(get()) }
     single { UpdateProfessionalSlotUseCase(get()) }
+    single { GetServicesByProfessionalIdUseCase(get()) }
     single { GoogleAuthUseCase(get(), get(), get()) }
 }

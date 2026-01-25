@@ -68,4 +68,14 @@ class ServiceRepository(
             }!!
         }
     }
+
+    override fun findByProfessionalId(professionalId: UUID): Result<List<Service>> =
+        runCatching {
+            transaction(database) {
+                ServiceTable
+                    .select(ServiceTable.columns)
+                    .where { ServiceTable.professionalId eq professionalId }
+                    .map { row -> ServiceTable.toDomain(row) }
+            }
+        }
 }
