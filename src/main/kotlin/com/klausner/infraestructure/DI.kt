@@ -4,6 +4,8 @@ import com.klausner.repositories.professional.IProfessionalRepository
 import com.klausner.repositories.professional.ProfessionalRepository
 import com.klausner.repositories.service.IServiceRepository
 import com.klausner.repositories.service.ServiceRepository
+import com.klausner.repositories.slot.ISlotRepository
+import com.klausner.repositories.slot.SlotRepository
 import com.klausner.repositories.user.IUserRepository
 import com.klausner.repositories.user.UserRepository
 import com.klausner.services.GoogleAuthService
@@ -18,6 +20,11 @@ import com.klausner.usecases.professional.UpdateProfessionalUseCase
 import com.klausner.usecases.service.CreateServiceUseCase
 import com.klausner.usecases.service.DeleteServiceUseCase
 import com.klausner.usecases.service.GetServicesByProfessionalIdUseCase
+import com.klausner.usecases.slot.BookSlotUseCase
+import com.klausner.usecases.slot.CancelBookingUseCase
+import com.klausner.usecases.slot.CreateSlotUseCase
+import com.klausner.usecases.slot.DeleteSlotUseCase
+import com.klausner.usecases.slot.GetSlotsByProfessionalIdUseCase
 import org.jetbrains.exposed.sql.Database
 import org.koin.dsl.bind
 import org.koin.dsl.module
@@ -42,6 +49,7 @@ val mainModule =
         // repositories
         single { ProfessionalRepository(get()) } bind IProfessionalRepository::class
         single { ServiceRepository(get()) } bind IServiceRepository::class
+        single { SlotRepository(get()) } bind ISlotRepository::class
         single { UserRepository(get()) } bind IUserRepository::class
 
         // use cases
@@ -55,4 +63,9 @@ val mainModule =
         single { GoogleAuthUseCase(get(), get(), get()) }
         single { CreateServiceUseCase(get()) }
         single { DeleteServiceUseCase(get()) }
+        single { CreateSlotUseCase(get()) }
+        single { GetSlotsByProfessionalIdUseCase(get()) }
+        single { DeleteSlotUseCase(get()) }
+        single { BookSlotUseCase(get()) }
+        single { CancelBookingUseCase(get()) }
     }
