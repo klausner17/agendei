@@ -1,6 +1,8 @@
 package com.klausner.infraestructure
 
+import com.klausner.database.tables.CustomerTable
 import com.klausner.database.tables.ProfessionalTable
+import com.klausner.database.tables.ScheduleTable
 import com.klausner.database.tables.ServiceTable
 import com.klausner.database.tables.SlotTable
 import com.klausner.database.tables.UserTable
@@ -15,6 +17,8 @@ object DatabaseMigration {
             SchemaUtils.create(ProfessionalTable)
             SchemaUtils.create(ServiceTable)
             SchemaUtils.create(SlotTable)
+            SchemaUtils.create(CustomerTable)
+            SchemaUtils.create(ScheduleTable)
         }
     }
 }
