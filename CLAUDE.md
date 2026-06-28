@@ -139,19 +139,28 @@ Seguir as regras de Object Calisthenics em todo código novo:
 - **Padrão**: mockar apenas o que está na fronteira do use case (repositórios, serviços externos). Sem mocks de lógica interna.
 - **Rodar**: `./gradlew test`
 
+### TDD — Given / When / Then
+
+Escreva testes antes do código de produção, seguindo o ciclo red → green → refactor.
+Estruture cada teste em três blocos separados por linha em branco:
+
 ```kotlin
-class CreateXyzUseCaseTest {
-    private val repository = mockk<IXyzRepository>()
-    private val useCase = CreateXyzUseCase(repository)
+@Test
+fun `deve criar xyz com sucesso`() {
+    // given
+    every { repository.create(any()) } returns Result.success(xyz)
 
-    @Test
-    fun `deve criar xyz com sucesso`() {
-        every { repository.create(any()) } returns Result.success(xyz)
+    // when
+    val result = useCase.execute(CreateXyzUseCase.Input(...))
 
-        val result = useCase.execute(CreateXyzUseCase.Input(...))
-
-        assertTrue(result.isSuccess)
-        verify(exactly = 1) { repository.create(any()) }
-    }
+    // then
+    assertTrue(result.isSuccess)
+    verify(exactly = 1) { repository.create(any()) }
 }
 ```
+
+- **given**: estado inicial e configuração dos mocks
+- **when**: execução do comportamento sendo testado (uma única chamada)
+- **then**: asserções sobre o resultado e efeitos colaterais
+
+Cada teste cobre **um único comportamento**. Se o nome do teste precisar de "e" para descrever o que verifica, divida em dois testes.
