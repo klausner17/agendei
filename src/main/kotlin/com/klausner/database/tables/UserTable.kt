@@ -23,8 +23,7 @@ object UserTable : Table("users") {
             picture = row[picture],
             provider = row[provider],
             googleId = row[googleId],
-            emailVerified = row[emailVerified]
+            emailVerified = row[emailVerified],
         )
     }
 }
-

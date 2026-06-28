@@ -18,25 +18,27 @@ class CreateServiceUseCaseTest {
 
     @Test
     fun `deve criar servico com sucesso`() {
-        val service = Service(
-            id = UUID.randomUUID(),
-            professionalId = professionalId,
-            name = "Corte",
-            description = "Corte masculino",
-            price = 5000,
-            durationInMinutes = 30,
-        )
-        every { repository.create(any()) } returns Result.success(service)
-
-        val result = useCase.execute(
-            CreateServiceUseCase.Input(
-                name = "Corte",
+        val service =
+            Service(
+                id = UUID.randomUUID(),
                 professionalId = professionalId,
+                name = "Corte",
                 description = "Corte masculino",
                 price = 5000,
                 durationInMinutes = 30,
-            ),
-        )
+            )
+        every { repository.create(any()) } returns Result.success(service)
+
+        val result =
+            useCase.execute(
+                CreateServiceUseCase.Input(
+                    name = "Corte",
+                    professionalId = professionalId,
+                    description = "Corte masculino",
+                    price = 5000,
+                    durationInMinutes = 30,
+                ),
+            )
 
         assertTrue(result.isSuccess)
         assertEquals("Corte", result.getOrThrow().name)
@@ -48,15 +50,16 @@ class CreateServiceUseCaseTest {
     fun `deve retornar falha quando repositorio falha`() {
         every { repository.create(any()) } returns Result.failure(RuntimeException("DB error"))
 
-        val result = useCase.execute(
-            CreateServiceUseCase.Input(
-                name = "Corte",
-                professionalId = professionalId,
-                description = null,
-                price = 5000,
-                durationInMinutes = 30,
-            ),
-        )
+        val result =
+            useCase.execute(
+                CreateServiceUseCase.Input(
+                    name = "Corte",
+                    professionalId = professionalId,
+                    description = null,
+                    price = 5000,
+                    durationInMinutes = 30,
+                ),
+            )
 
         assertTrue(result.isFailure)
     }

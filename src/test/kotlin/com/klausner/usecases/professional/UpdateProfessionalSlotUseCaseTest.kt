@@ -5,13 +5,12 @@ import com.klausner.domains.valueobjects.Interval
 import com.klausner.repositories.professional.IProfessionalRepository
 import io.mockk.every
 import io.mockk.mockk
-import io.mockk.verify
 import java.time.LocalDateTime
 import java.util.UUID
-import io.mockk.slot as captureSlot
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
+import io.mockk.slot as captureSlot
 
 class UpdateProfessionalSlotUseCaseTest {
     private val repository = mockk<IProfessionalRepository>()
@@ -19,7 +18,8 @@ class UpdateProfessionalSlotUseCaseTest {
 
     private val professionalId = UUID.randomUUID()
     private val professional = Professional(id = professionalId, name = "Ana Lima")
-    private val newSlot = Interval(startTime = LocalDateTime.of(2026, 7, 1, 9, 0), endTime = LocalDateTime.of(2026, 7, 1, 10, 0))
+    private val newSlot =
+        Interval(startTime = LocalDateTime.of(2026, 7, 1, 9, 0), endTime = LocalDateTime.of(2026, 7, 1, 10, 0))
 
     @Test
     fun `deve substituir slots do profissional pelos slots informados`() {
@@ -27,9 +27,10 @@ class UpdateProfessionalSlotUseCaseTest {
         every { repository.find(professionalId) } returns Result.success(professional)
         every { repository.update(capture(captured)) } returns Result.success(professional)
 
-        val result = useCase.execute(
-            UpdateProfessionalSlotUseCase.Input(professionalId = professionalId, slot = listOf(newSlot)),
-        )
+        val result =
+            useCase.execute(
+                UpdateProfessionalSlotUseCase.Input(professionalId = professionalId, slot = listOf(newSlot)),
+            )
 
         assertTrue(result.isSuccess)
         assertEquals(listOf(newSlot), captured.captured.slots)
@@ -39,9 +40,10 @@ class UpdateProfessionalSlotUseCaseTest {
     fun `deve retornar falha quando profissional nao existe`() {
         every { repository.find(professionalId) } returns Result.failure(NoSuchElementException("not found"))
 
-        val result = useCase.execute(
-            UpdateProfessionalSlotUseCase.Input(professionalId = professionalId, slot = listOf(newSlot)),
-        )
+        val result =
+            useCase.execute(
+                UpdateProfessionalSlotUseCase.Input(professionalId = professionalId, slot = listOf(newSlot)),
+            )
 
         assertTrue(result.isFailure)
     }

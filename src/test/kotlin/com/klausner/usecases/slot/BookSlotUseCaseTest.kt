@@ -17,25 +17,28 @@ class BookSlotUseCaseTest {
 
     private val slotId = UUID.randomUUID()
     private val professionalId = UUID.randomUUID()
-    private val availableSlot = Slot(
-        id = slotId,
-        professionalId = professionalId,
-        startTime = LocalDateTime.of(2026, 7, 1, 9, 0),
-        endTime = LocalDateTime.of(2026, 7, 1, 10, 0),
-        status = Slot.Status.AVAILABLE,
-    )
+    private val availableSlot =
+        Slot(
+            id = slotId,
+            professionalId = professionalId,
+            startTime = LocalDateTime.of(2026, 7, 1, 9, 0),
+            endTime = LocalDateTime.of(2026, 7, 1, 10, 0),
+            status = Slot.Status.AVAILABLE,
+        )
 
     @Test
     fun `deve agendar slot disponivel`() {
         val captured = slot<Slot>()
         every { repository.find(slotId) } returns Result.success(availableSlot)
-        every { repository.update(capture(captured)) } returns Result.success(
-            availableSlot.copy(status = Slot.Status.BOOKED, customerName = "João"),
-        )
+        every { repository.update(capture(captured)) } returns
+            Result.success(
+                availableSlot.copy(status = Slot.Status.BOOKED, customerName = "João"),
+            )
 
-        val result = useCase.execute(
-            BookSlotUseCase.Input(slotId = slotId, customerName = "João"),
-        )
+        val result =
+            useCase.execute(
+                BookSlotUseCase.Input(slotId = slotId, customerName = "João"),
+            )
 
         assertTrue(result.isSuccess)
         assertEquals(Slot.Status.BOOKED, captured.captured.status)
@@ -47,9 +50,10 @@ class BookSlotUseCaseTest {
         val bookedSlot = availableSlot.copy(status = Slot.Status.BOOKED)
         every { repository.find(slotId) } returns Result.success(bookedSlot)
 
-        val result = useCase.execute(
-            BookSlotUseCase.Input(slotId = slotId, customerName = "João"),
-        )
+        val result =
+            useCase.execute(
+                BookSlotUseCase.Input(slotId = slotId, customerName = "João"),
+            )
 
         assertTrue(result.isFailure)
         assertTrue(result.exceptionOrNull() is IllegalStateException)
@@ -60,9 +64,10 @@ class BookSlotUseCaseTest {
         val serviceId = UUID.randomUUID()
         val captured = slot<Slot>()
         every { repository.find(slotId) } returns Result.success(availableSlot)
-        every { repository.update(capture(captured)) } returns Result.success(
-            availableSlot.copy(status = Slot.Status.BOOKED),
-        )
+        every { repository.update(capture(captured)) } returns
+            Result.success(
+                availableSlot.copy(status = Slot.Status.BOOKED),
+            )
 
         useCase.execute(
             BookSlotUseCase.Input(
@@ -81,9 +86,10 @@ class BookSlotUseCaseTest {
     fun `deve retornar falha quando slot nao existe`() {
         every { repository.find(slotId) } returns Result.failure(NoSuchElementException("not found"))
 
-        val result = useCase.execute(
-            BookSlotUseCase.Input(slotId = slotId, customerName = "João"),
-        )
+        val result =
+            useCase.execute(
+                BookSlotUseCase.Input(slotId = slotId, customerName = "João"),
+            )
 
         assertTrue(result.isFailure)
     }

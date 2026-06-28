@@ -19,20 +19,23 @@ class CreateSlotUseCaseTest {
     private val startTime = LocalDateTime.of(2026, 7, 1, 9, 0)
     private val endTime = LocalDateTime.of(2026, 7, 1, 10, 0)
 
-    private fun slot(start: LocalDateTime = startTime, end: LocalDateTime = endTime) =
-        Slot(professionalId = professionalId, startTime = start, endTime = end)
+    private fun slot(
+        start: LocalDateTime = startTime,
+        end: LocalDateTime = endTime,
+    ) = Slot(professionalId = professionalId, startTime = start, endTime = end)
 
     @Test
     fun `deve criar slot unico quando recorrencia nao informada`() {
         every { repository.create(any()) } returns Result.success(slot())
 
-        val result = useCase.execute(
-            CreateSlotUseCase.Input(
-                professionalId = professionalId,
-                startTime = startTime,
-                endTime = endTime,
-            ),
-        )
+        val result =
+            useCase.execute(
+                CreateSlotUseCase.Input(
+                    professionalId = professionalId,
+                    startTime = startTime,
+                    endTime = endTime,
+                ),
+            )
 
         assertTrue(result.isSuccess)
         assertEquals(1, result.getOrThrow().size)
@@ -44,14 +47,15 @@ class CreateSlotUseCaseTest {
     fun `deve criar slot unico quando recorrencia igual a 1`() {
         every { repository.create(any()) } returns Result.success(slot())
 
-        val result = useCase.execute(
-            CreateSlotUseCase.Input(
-                professionalId = professionalId,
-                startTime = startTime,
-                endTime = endTime,
-                recurrenceWeeks = 1,
-            ),
-        )
+        val result =
+            useCase.execute(
+                CreateSlotUseCase.Input(
+                    professionalId = professionalId,
+                    startTime = startTime,
+                    endTime = endTime,
+                    recurrenceWeeks = 1,
+                ),
+            )
 
         assertTrue(result.isSuccess)
         verify(exactly = 1) { repository.create(any()) }
@@ -59,21 +63,23 @@ class CreateSlotUseCaseTest {
 
     @Test
     fun `deve criar multiplos slots com recorrencia semanal`() {
-        val slots = listOf(
-            slot(startTime, endTime),
-            slot(startTime.plusWeeks(1), endTime.plusWeeks(1)),
-            slot(startTime.plusWeeks(2), endTime.plusWeeks(2)),
-        )
+        val slots =
+            listOf(
+                slot(startTime, endTime),
+                slot(startTime.plusWeeks(1), endTime.plusWeeks(1)),
+                slot(startTime.plusWeeks(2), endTime.plusWeeks(2)),
+            )
         every { repository.createAll(any()) } returns Result.success(slots)
 
-        val result = useCase.execute(
-            CreateSlotUseCase.Input(
-                professionalId = professionalId,
-                startTime = startTime,
-                endTime = endTime,
-                recurrenceWeeks = 3,
-            ),
-        )
+        val result =
+            useCase.execute(
+                CreateSlotUseCase.Input(
+                    professionalId = professionalId,
+                    startTime = startTime,
+                    endTime = endTime,
+                    recurrenceWeeks = 3,
+                ),
+            )
 
         assertTrue(result.isSuccess)
         assertEquals(3, result.getOrThrow().size)
@@ -85,13 +91,14 @@ class CreateSlotUseCaseTest {
     fun `deve retornar falha quando repositorio falha`() {
         every { repository.create(any()) } returns Result.failure(RuntimeException("DB error"))
 
-        val result = useCase.execute(
-            CreateSlotUseCase.Input(
-                professionalId = professionalId,
-                startTime = startTime,
-                endTime = endTime,
-            ),
-        )
+        val result =
+            useCase.execute(
+                CreateSlotUseCase.Input(
+                    professionalId = professionalId,
+                    startTime = startTime,
+                    endTime = endTime,
+                ),
+            )
 
         assertTrue(result.isFailure)
     }

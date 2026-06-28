@@ -19,12 +19,13 @@ class GoogleAuthUseCaseTest {
     private val userRepository = mockk<IUserRepository>()
     private val useCase = GoogleAuthUseCase(googleAuthService, jwtService, userRepository)
 
-    private val existingUser = User(
-        id = UUID.randomUUID(),
-        email = "ana@email.com",
-        name = "Ana Lima",
-        googleId = "google-123",
-    )
+    private val existingUser =
+        User(
+            id = UUID.randomUUID(),
+            email = "ana@email.com",
+            name = "Ana Lima",
+            googleId = "google-123",
+        )
 
     private fun mockPayload(
         googleId: String = "google-123",
