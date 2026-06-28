@@ -6,8 +6,10 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.klausner.infraestructure.DatabaseMigration
 import com.klausner.infraestructure.mainModule
 import com.klausner.routes.config
+import com.klausner.routes.customerRoutes
 import com.klausner.routes.loginRoutes
 import com.klausner.routes.professionalRoutes
+import com.klausner.routes.scheduleRoutes
 import com.klausner.routes.whatsappRoutes
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpMethod
@@ -63,6 +65,8 @@ fun main() {
             authenticate("jwt-auth") {
                 route("/api/v1") {
                     professionalRoutes()
+                    customerRoutes()
+                    scheduleRoutes()
                     whatsappRoutes()
                 }
             }

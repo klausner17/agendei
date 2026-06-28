@@ -1,7 +1,11 @@
 package com.klausner.infraestructure
 
+import com.klausner.repositories.customer.CustomerRepository
+import com.klausner.repositories.customer.ICustomerRepository
 import com.klausner.repositories.professional.IProfessionalRepository
 import com.klausner.repositories.professional.ProfessionalRepository
+import com.klausner.repositories.schedule.IScheduleRepository
+import com.klausner.repositories.schedule.ScheduleRepository
 import com.klausner.repositories.service.IServiceRepository
 import com.klausner.repositories.service.ServiceRepository
 import com.klausner.repositories.slot.ISlotRepository
@@ -11,12 +15,14 @@ import com.klausner.repositories.user.UserRepository
 import com.klausner.services.GoogleAuthService
 import com.klausner.services.JwtService
 import com.klausner.usecases.auth.GoogleAuthUseCase
+import com.klausner.usecases.customer.CreateCustomerUseCase
 import com.klausner.usecases.professional.CreateProfessionalUseCase
 import com.klausner.usecases.professional.DeleteProfessionalUseCase
 import com.klausner.usecases.professional.GetAllProfessionalsUseCase
 import com.klausner.usecases.professional.GetProfessionalUseCase
 import com.klausner.usecases.professional.UpdateProfessionalSlotUseCase
 import com.klausner.usecases.professional.UpdateProfessionalUseCase
+import com.klausner.usecases.schedule.CreateScheduleUseCase
 import com.klausner.usecases.service.CreateServiceUseCase
 import com.klausner.usecases.service.DeleteServiceUseCase
 import com.klausner.usecases.service.GetServicesByProfessionalIdUseCase
@@ -51,8 +57,12 @@ val mainModule =
         single { ServiceRepository(get()) } bind IServiceRepository::class
         single { SlotRepository(get()) } bind ISlotRepository::class
         single { UserRepository(get()) } bind IUserRepository::class
+        single { CustomerRepository(get()) } bind ICustomerRepository::class
+        single { ScheduleRepository(get()) } bind IScheduleRepository::class
 
         // use cases
+        single { CreateCustomerUseCase(get()) }
+        single { CreateScheduleUseCase(get(), get(), get()) }
         single { CreateProfessionalUseCase(get()) }
         single { GetProfessionalUseCase(get()) }
         single { GetAllProfessionalsUseCase(get()) }
