@@ -1,17 +1,34 @@
 package com.klausner.usecases.slot
 
+import com.klausner.domains.Professional
 import com.klausner.domains.Slot
+import com.klausner.infraestructure.flatMap
+import com.klausner.repositories.professional.IProfessionalRepository
 import com.klausner.repositories.slot.ISlotRepository
 import com.klausner.usecases.UseCase
-import com.klausner.usecases.slot.CreateSlotUseCase.Input
-import com.klausner.usecases.slot.CreateSlotUseCase.Output
 import java.time.LocalDateTime
 import java.util.UUID
 
 class CreateSlotUseCase(
-    private val repository: ISlotRepository,
-) : UseCase<Input, List<Output>> {
-    override fun execute(input: Input): Result<List<Output>> {
+    private val slotRepository: ISlotRepository,
+    private val professionalRepository: IProfessionalRepository,
+) : UseCase<CreateSlotUseCase.Input, List<CreateSlotUseCase.Output>> {
+    override fun execute(input: Input): Result<List<Output>> =
+        professionalRepository.find(input.professionalId)
+            .flatMap { professional -> checkOwnership(professional, input.requesterId) }
+            .flatMap { createSlots(input) }
+
+    private fun checkOwnership(
+        professional: Professional,
+        requesterId: UUID,
+    ): Result<Professional> =
+        if (professional.userId == requesterId) {
+            Result.success(professional)
+        } else {
+            Result.failure(SecurityException("Access denied"))
+        }
+
+    private fun createSlots(input: Input): Result<List<Output>> {
         val weeks = input.recurrenceWeeks ?: 1
         val slots =
             (0 until weeks).map { week ->
@@ -24,9 +41,9 @@ class CreateSlotUseCase(
             }
 
         return if (slots.size == 1) {
-            repository.create(slots.first()).map { listOf(domainToOutput(it)) }
+            slotRepository.create(slots.first()).map { listOf(domainToOutput(it)) }
         } else {
-            repository.createAll(slots).map { it.map(::domainToOutput) }
+            slotRepository.createAll(slots).map { it.map(::domainToOutput) }
         }
     }
 
@@ -44,6 +61,7 @@ class CreateSlotUseCase(
 
     data class Input(
         val professionalId: UUID,
+        val requesterId: UUID,
         val serviceId: UUID? = null,
         val startTime: LocalDateTime,
         val endTime: LocalDateTime,

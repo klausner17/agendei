@@ -22,6 +22,7 @@ class ProfessionalRepository(
                     ProfessionalTable
                         .insert {
                             it[id] = obj.id.toString()
+                            it[userId] = obj.userId
                             it[storeId] = obj.storeId
                             it[professionalName] = obj.name
                             it[bio] = obj.bio
@@ -108,6 +109,17 @@ class ProfessionalRepository(
                     .select(ProfessionalTable.columns)
                     .map { row -> ProfessionalTable.toDomain(row) }
             }
+        }
+
+    override fun findByUserId(userId: UUID): Result<Professional> =
+        runCatching {
+            transaction(database) {
+                ProfessionalTable
+                    .select(ProfessionalTable.columns)
+                    .where { ProfessionalTable.userId eq userId }
+                    .map { row -> ProfessionalTable.toDomain(row) }
+                    .singleOrNull()
+            } ?: error(PROFESSIONAL_NOT_FOUND)
         }
 
     private companion object {

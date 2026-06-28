@@ -1,23 +1,23 @@
-package com.klausner.usecases.slot
+package com.klausner.usecases.schedule
 
 import com.klausner.domains.Professional
-import com.klausner.domains.Slot
+import com.klausner.domains.Schedule
 import com.klausner.infraestructure.flatMap
 import com.klausner.repositories.professional.IProfessionalRepository
-import com.klausner.repositories.slot.ISlotRepository
+import com.klausner.repositories.schedule.IScheduleRepository
 import com.klausner.usecases.UseCase
 import java.time.LocalDateTime
 import java.util.UUID
 
-class GetSlotsByProfessionalIdUseCase(
-    private val slotRepository: ISlotRepository,
+class GetSchedulesByProfessionalUseCase(
+    private val scheduleRepository: IScheduleRepository,
     private val professionalRepository: IProfessionalRepository,
-) : UseCase<GetSlotsByProfessionalIdUseCase.Input, List<GetSlotsByProfessionalIdUseCase.Output>> {
+) : UseCase<GetSchedulesByProfessionalUseCase.Input, List<GetSchedulesByProfessionalUseCase.Output>> {
     override fun execute(input: Input): Result<List<Output>> =
         professionalRepository.find(input.professionalId)
             .flatMap { professional -> checkOwnership(professional, input.requesterId) }
-            .flatMap { slotRepository.findByProfessionalId(input.professionalId) }
-            .map { slots -> slots.map(::domainToOutput) }
+            .flatMap { scheduleRepository.findByProfessionalId(input.professionalId) }
+            .map { schedules -> schedules.map(::domainToOutput) }
 
     private fun checkOwnership(
         professional: Professional,
@@ -29,16 +29,15 @@ class GetSlotsByProfessionalIdUseCase(
             Result.failure(SecurityException("Access denied"))
         }
 
-    private fun domainToOutput(slot: Slot) =
+    private fun domainToOutput(schedule: Schedule) =
         Output(
-            id = slot.id,
-            professionalId = slot.professionalId,
-            serviceId = slot.serviceId,
-            startTime = slot.startTime,
-            endTime = slot.endTime,
-            status = slot.status.name,
-            customerName = slot.customerName,
-            customerPhone = slot.customerPhone,
+            id = schedule.id,
+            professionalId = schedule.professionalId,
+            customerId = schedule.customerId,
+            observation = schedule.observation,
+            startTime = schedule.interval.startTime,
+            endTime = schedule.interval.endTime,
+            status = schedule.status.name,
         )
 
     data class Input(
@@ -49,11 +48,10 @@ class GetSlotsByProfessionalIdUseCase(
     data class Output(
         val id: UUID,
         val professionalId: UUID,
-        val serviceId: UUID?,
+        val customerId: UUID,
+        val observation: String,
         val startTime: LocalDateTime,
         val endTime: LocalDateTime,
         val status: String,
-        val customerName: String?,
-        val customerPhone: String?,
     )
 }

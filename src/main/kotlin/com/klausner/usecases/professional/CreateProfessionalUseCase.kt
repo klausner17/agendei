@@ -35,6 +35,7 @@ class CreateProfessionalUseCase(
     private fun inputToDomain(input: Input) =
         Professional(
             id = UUID.randomUUID(),
+            userId = input.userId,
             name = input.name,
             bio = input.bio,
             address = null,
@@ -46,6 +47,7 @@ class CreateProfessionalUseCase(
         )
 
     data class Input(
+        val userId: UUID,
         val name: String,
         val email: String? = null,
         val phone: Phone? = null,

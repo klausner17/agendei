@@ -38,8 +38,8 @@ fun Route.professionalRoutes() {
             foldAndRespond(getAllProfessionalsUseCase.execute())
         }
         post {
-            val professional = call.receive<CreateProfessionalUseCase.Input>()
-            foldAndRespond(createProfessionalUseCase.execute(professional))
+            val input = call.receive<CreateProfessionalUseCase.Input>().copy(userId = principalUserId())
+            foldAndRespond(createProfessionalUseCase.execute(input))
         }
         route("/{id}") {
             get {
@@ -49,8 +49,7 @@ fun Route.professionalRoutes() {
             route("/services") {
                 get {
                     val id = UUID.fromString(call.parameters["id"]!!)
-                    val result = getMyServicesUseCase.execute(GetServicesByProfessionalIdUseCase.Input(id))
-                    foldAndRespond(result)
+                    foldAndRespond(getMyServicesUseCase.execute(GetServicesByProfessionalIdUseCase.Input(id)))
                 }
                 post {
                     val professionalId = UUID.fromString(call.parameters["id"]!!)
@@ -69,7 +68,12 @@ fun Route.professionalRoutes() {
             route("/slots") {
                 get {
                     val id = UUID.fromString(call.parameters["id"]!!)
-                    foldAndRespond(getSlotsByProfessionalIdUseCase.execute(GetSlotsByProfessionalIdUseCase.Input(id)))
+                    val input =
+                        GetSlotsByProfessionalIdUseCase.Input(
+                            professionalId = id,
+                            requesterId = principalUserId(),
+                        )
+                    foldAndRespond(getSlotsByProfessionalIdUseCase.execute(input))
                 }
                 post {
                     val id = UUID.fromString(call.parameters["id"]!!)
@@ -77,6 +81,7 @@ fun Route.professionalRoutes() {
                     val input =
                         CreateSlotUseCase.Input(
                             professionalId = id,
+                            requesterId = principalUserId(),
                             serviceId = request.serviceId,
                             startTime = request.startTime,
                             endTime = request.endTime,
@@ -87,7 +92,12 @@ fun Route.professionalRoutes() {
                 route("/{slotId}") {
                     delete {
                         val slotId = UUID.fromString(call.parameters["slotId"]!!)
-                        foldAndRespond(deleteSlotUseCase.execute(DeleteSlotUseCase.Input(slotId)))
+                        val input =
+                            DeleteSlotUseCase.Input(
+                                slotId = slotId,
+                                requesterId = principalUserId(),
+                            )
+                        foldAndRespond(deleteSlotUseCase.execute(input))
                     }
                     patch("/book") {
                         val slotId = UUID.fromString(call.parameters["slotId"]!!)

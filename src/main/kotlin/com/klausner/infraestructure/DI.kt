@@ -23,6 +23,7 @@ import com.klausner.usecases.professional.GetProfessionalUseCase
 import com.klausner.usecases.professional.UpdateProfessionalSlotUseCase
 import com.klausner.usecases.professional.UpdateProfessionalUseCase
 import com.klausner.usecases.schedule.CreateScheduleUseCase
+import com.klausner.usecases.schedule.GetSchedulesByProfessionalUseCase
 import com.klausner.usecases.service.CreateServiceUseCase
 import com.klausner.usecases.service.DeleteServiceUseCase
 import com.klausner.usecases.service.GetServicesByProfessionalIdUseCase
@@ -63,6 +64,7 @@ val mainModule =
         // use cases
         single { CreateCustomerUseCase(get()) }
         single { CreateScheduleUseCase(get(), get(), get()) }
+        single { GetSchedulesByProfessionalUseCase(get(), get()) }
         single { CreateProfessionalUseCase(get()) }
         single { GetProfessionalUseCase(get()) }
         single { GetAllProfessionalsUseCase(get()) }
@@ -73,9 +75,9 @@ val mainModule =
         single { GoogleAuthUseCase(get(), get(), get()) }
         single { CreateServiceUseCase(get()) }
         single { DeleteServiceUseCase(get()) }
-        single { CreateSlotUseCase(get()) }
-        single { GetSlotsByProfessionalIdUseCase(get()) }
-        single { DeleteSlotUseCase(get()) }
+        single { CreateSlotUseCase(get(), get()) }
+        single { GetSlotsByProfessionalIdUseCase(get(), get()) }
+        single { DeleteSlotUseCase(get(), get()) }
         single { BookSlotUseCase(get()) }
         single { CancelBookingUseCase(get()) }
     }

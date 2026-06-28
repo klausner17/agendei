@@ -50,5 +50,6 @@ fun statusFor(exception: Throwable): HttpStatusCode =
         is NoSuchElementException -> HttpStatusCode.NotFound
         is IllegalArgumentException -> HttpStatusCode.BadRequest
         is IllegalStateException -> HttpStatusCode.UnprocessableEntity
+        is SecurityException -> HttpStatusCode.Forbidden
         else -> HttpStatusCode.InternalServerError
     }
