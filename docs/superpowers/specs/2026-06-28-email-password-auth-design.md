@@ -118,6 +118,37 @@ Remove as colunas do Google. Banco de dev descartável — assume-se recriação
 - `docs/openapi.yaml`: remover path `/api/v1/auth/google`; adicionar `/register` e `/login`;
   documentar resposta 429; atualizar schema de `User` (remover picture/provider/etc.).
 
+## Impacto em JWT e autorização
+
+A camada de JWT e autorização (foco da branch `feat/authorization`) permanece intacta.
+Só muda a **origem** do token; o formato e a validação são os mesmos.
+
+**Permanece igual:**
+- `JwtService.generateToken(user)` — `subject` = `user.id` (UUID), claims `email`/`name`,
+  expiração 7 dias, HMAC256 com `JWT_SECRET`.
+- Validação `jwt-auth` (`LoginRoutes.kt:config()`) — verifica assinatura + subject não-nulo → `JWTPrincipal`.
+- `principalUserId()` (`PrincipalExt.kt`) — lê `payload.subject` como UUID.
+- Checks de ownership nos use cases — `professional.userId == requesterId`, com
+  `requesterId = principalUserId()`. Como o `subject` continua sendo `user.id`, funcionam sem alteração.
+- Bloco `authenticate("jwt-auth")` em `Main.kt` — todas as rotas `/api/v1` seguem protegidas.
+
+**Muda apenas a origem do token:**
+- Antes: `POST /api/v1/auth/google { credential } → { token, user }`.
+- Agora: `POST /api/v1/auth/register { email, name, password }` e
+  `POST /api/v1/auth/login { email, password }`, ambos retornando o mesmo `{ token, user{id,email,name} }`.
+
+**Fluxo:**
+```
+1. register/login  → JwtService.generateToken(user) → { token, user }
+2. cliente         → Authorization: Bearer <token>
+3. jwt-auth valida → JWTPrincipal(subject = user.id)
+4. principalUserId() → UUID
+5. use case        → professional.userId == requesterId
+```
+
+**Ordem dos plugins:** rate limit roda antes da autenticação. Rotas protegidas pegam o
+limite global (100/min); `/login` e `/register` pegam o limite estrito de auth (5/min).
+
 ## Fora de escopo
 
 - **Frontend** (`../agendei-frontend`): usa o fluxo Google e consome `picture`/`provider`
