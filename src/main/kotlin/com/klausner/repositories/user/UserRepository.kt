@@ -18,10 +18,7 @@ class UserRepository(
                     it[id] = obj.id
                     it[email] = obj.email
                     it[name] = obj.name
-                    it[picture] = obj.picture
-                    it[provider] = obj.provider
-                    it[googleId] = obj.googleId
-                    it[emailVerified] = obj.emailVerified
+                    it[passwordHash] = obj.passwordHash
                 }
 
                 UserTable
@@ -38,17 +35,6 @@ class UserRepository(
                 UserTable
                     .selectAll()
                     .where { UserTable.email eq email }
-                    .map { row -> UserTable.toDomain(row) }
-                    .singleOrNull()
-            }
-        }
-
-    override fun findByGoogleId(googleId: String): Result<User?> =
-        runCatching {
-            transaction(database) {
-                UserTable
-                    .selectAll()
-                    .where { UserTable.googleId eq googleId }
                     .map { row -> UserTable.toDomain(row) }
                     .singleOrNull()
             }

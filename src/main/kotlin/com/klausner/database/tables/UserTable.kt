@@ -6,12 +6,9 @@ import org.jetbrains.exposed.sql.Table
 
 object UserTable : Table("users") {
     val id = uuid("id")
-    val email = varchar("email", 255)
+    val email = varchar("email", 255).uniqueIndex()
     val name = varchar("name", 255)
-    val picture = varchar("picture", 500).nullable()
-    val provider = varchar("provider", 50)
-    val googleId = varchar("google_id", 255)
-    val emailVerified = bool("email_verified")
+    val passwordHash = varchar("password_hash", 255)
 
     override val primaryKey = PrimaryKey(id)
 
@@ -20,10 +17,7 @@ object UserTable : Table("users") {
             id = row[id],
             email = row[email],
             name = row[name],
-            picture = row[picture],
-            provider = row[provider],
-            googleId = row[googleId],
-            emailVerified = row[emailVerified],
+            passwordHash = row[passwordHash],
         )
     }
 }
