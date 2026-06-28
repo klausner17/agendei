@@ -45,7 +45,6 @@ dependencies {
     implementation("ch.qos.logback:logback-classic:1.5.16")
     implementation("org.xerial:sqlite-jdbc:3.49.1.0")
     implementation("io.insert-koin:koin-core:4.1.0")
-    implementation("com.google.api-client:google-api-client:2.7.2")
     implementation("com.auth0:java-jwt:4.4.0")
 
     testImplementation("io.ktor:ktor-server-test-host:$ktorVersion")

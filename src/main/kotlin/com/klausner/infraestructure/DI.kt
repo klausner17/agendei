@@ -12,10 +12,8 @@ import com.klausner.repositories.slot.ISlotRepository
 import com.klausner.repositories.slot.SlotRepository
 import com.klausner.repositories.user.IUserRepository
 import com.klausner.repositories.user.UserRepository
-import com.klausner.services.GoogleAuthService
 import com.klausner.services.JwtService
 import com.klausner.services.PasswordHasher
-import com.klausner.usecases.auth.GoogleAuthUseCase
 import com.klausner.usecases.customer.CreateCustomerUseCase
 import com.klausner.usecases.professional.CreateProfessionalUseCase
 import com.klausner.usecases.professional.DeleteProfessionalUseCase
@@ -44,11 +42,6 @@ val mainModule =
 
         // services
         single {
-            GoogleAuthService(
-                clientId = "47481749184-lv7j2hj1v1id47jsfq8c3sf77rthjf3g.apps.googleusercontent.com",
-            )
-        }
-        single {
             JwtService(
                 secret = System.getenv("JWT_SECRET") ?: "your-super-secret-jwt-key-change-in-production",
             )
@@ -74,7 +67,6 @@ val mainModule =
         single { DeleteProfessionalUseCase(get()) }
         single { UpdateProfessionalSlotUseCase(get()) }
         single { GetServicesByProfessionalIdUseCase(get()) }
-        single { GoogleAuthUseCase(get(), get(), get()) }
         single { CreateServiceUseCase(get()) }
         single { DeleteServiceUseCase(get()) }
         single { CreateSlotUseCase(get(), get()) }
