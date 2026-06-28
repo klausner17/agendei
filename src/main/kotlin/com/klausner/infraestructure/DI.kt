@@ -14,6 +14,7 @@ import com.klausner.repositories.user.IUserRepository
 import com.klausner.repositories.user.UserRepository
 import com.klausner.services.GoogleAuthService
 import com.klausner.services.JwtService
+import com.klausner.services.PasswordHasher
 import com.klausner.usecases.auth.GoogleAuthUseCase
 import com.klausner.usecases.customer.CreateCustomerUseCase
 import com.klausner.usecases.professional.CreateProfessionalUseCase
@@ -52,6 +53,7 @@ val mainModule =
                 secret = System.getenv("JWT_SECRET") ?: "your-super-secret-jwt-key-change-in-production",
             )
         }
+        single { PasswordHasher() }
 
         // repositories
         single { ProfessionalRepository(get()) } bind IProfessionalRepository::class
