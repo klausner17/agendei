@@ -17,24 +17,25 @@ class GetServicesByProfessionalIdUseCaseTest {
 
     @Test
     fun `deve retornar servicos do profissional`() {
-        val services = listOf(
-            Service(
-                id = UUID.randomUUID(),
-                professionalId = professionalId,
-                name = "Corte",
-                description = null,
-                price = 5000,
-                durationInMinutes = 30,
-            ),
-            Service(
-                id = UUID.randomUUID(),
-                professionalId = professionalId,
-                name = "Barba",
-                description = null,
-                price = 3000,
-                durationInMinutes = 20,
-            ),
-        )
+        val services =
+            listOf(
+                Service(
+                    id = UUID.randomUUID(),
+                    professionalId = professionalId,
+                    name = "Corte",
+                    description = null,
+                    price = 5000,
+                    durationInMinutes = 30,
+                ),
+                Service(
+                    id = UUID.randomUUID(),
+                    professionalId = professionalId,
+                    name = "Barba",
+                    description = null,
+                    price = 3000,
+                    durationInMinutes = 20,
+                ),
+            )
         every { repository.findByProfessionalId(professionalId) } returns Result.success(services)
 
         val result = useCase.execute(GetServicesByProfessionalIdUseCase.Input(professionalId = professionalId))

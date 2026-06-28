@@ -15,10 +15,11 @@ class GetAllProfessionalsUseCaseTest {
 
     @Test
     fun `deve retornar lista de profissionais`() {
-        val professionals = listOf(
-            Professional(id = UUID.randomUUID(), name = "Ana Lima"),
-            Professional(id = UUID.randomUUID(), name = "Carlos Silva"),
-        )
+        val professionals =
+            listOf(
+                Professional(id = UUID.randomUUID(), name = "Ana Lima"),
+                Professional(id = UUID.randomUUID(), name = "Carlos Silva"),
+            )
         every { repository.findAll() } returns Result.success(professionals)
 
         val result = useCase.execute()

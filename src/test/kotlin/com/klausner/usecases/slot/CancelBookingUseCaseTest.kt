@@ -16,23 +16,25 @@ class CancelBookingUseCaseTest {
     private val useCase = CancelBookingUseCase(repository)
 
     private val slotId = UUID.randomUUID()
-    private val bookedSlot = Slot(
-        id = slotId,
-        professionalId = UUID.randomUUID(),
-        startTime = LocalDateTime.of(2026, 7, 1, 9, 0),
-        endTime = LocalDateTime.of(2026, 7, 1, 10, 0),
-        status = Slot.Status.BOOKED,
-        customerName = "João",
-        customerPhone = "11999999999",
-    )
+    private val bookedSlot =
+        Slot(
+            id = slotId,
+            professionalId = UUID.randomUUID(),
+            startTime = LocalDateTime.of(2026, 7, 1, 9, 0),
+            endTime = LocalDateTime.of(2026, 7, 1, 10, 0),
+            status = Slot.Status.BOOKED,
+            customerName = "João",
+            customerPhone = "11999999999",
+        )
 
     @Test
     fun `deve cancelar reserva e limpar dados do cliente`() {
         val captured = slot<Slot>()
         every { repository.find(slotId) } returns Result.success(bookedSlot)
-        every { repository.update(capture(captured)) } returns Result.success(
-            bookedSlot.copy(status = Slot.Status.AVAILABLE, customerName = null, customerPhone = null),
-        )
+        every { repository.update(capture(captured)) } returns
+            Result.success(
+                bookedSlot.copy(status = Slot.Status.AVAILABLE, customerName = null, customerPhone = null),
+            )
 
         val result = useCase.execute(CancelBookingUseCase.Input(slotId = slotId))
 

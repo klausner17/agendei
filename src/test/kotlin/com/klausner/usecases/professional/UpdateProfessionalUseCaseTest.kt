@@ -24,9 +24,10 @@ class UpdateProfessionalUseCaseTest {
         every { repository.find(existingId) } returns Result.success(existing)
         every { repository.update(capture(captured)) } returns Result.success(updated)
 
-        val result = useCase.execute(
-            UpdateProfessionalUseCase.Input(id = existingId, name = "Nome Novo"),
-        )
+        val result =
+            useCase.execute(
+                UpdateProfessionalUseCase.Input(id = existingId, name = "Nome Novo"),
+            )
 
         assertTrue(result.isSuccess)
         assertEquals("Nome Novo", captured.captured.name)

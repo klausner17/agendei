@@ -16,11 +16,12 @@ class GetSlotsByProfessionalIdUseCaseTest {
 
     private val professionalId = UUID.randomUUID()
 
-    private fun slot(start: Int) = Slot(
-        professionalId = professionalId,
-        startTime = LocalDateTime.of(2026, 7, 1, start, 0),
-        endTime = LocalDateTime.of(2026, 7, 1, start + 1, 0),
-    )
+    private fun slot(start: Int) =
+        Slot(
+            professionalId = professionalId,
+            startTime = LocalDateTime.of(2026, 7, 1, start, 0),
+            endTime = LocalDateTime.of(2026, 7, 1, start + 1, 0),
+        )
 
     @Test
     fun `deve retornar slots do profissional`() {
