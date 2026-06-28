@@ -17,7 +17,7 @@ class CreateServiceUseCaseTest {
     private val professionalId = UUID.randomUUID()
 
     @Test
-    fun `deve criar servico com sucesso`() {
+    fun `should create service successfully`() {
         val service =
             Service(
                 id = UUID.randomUUID(),
@@ -47,7 +47,7 @@ class CreateServiceUseCaseTest {
     }
 
     @Test
-    fun `deve retornar falha quando repositorio falha`() {
+    fun `should return failure when repository fails`() {
         every { repository.create(any()) } returns Result.failure(RuntimeException("DB error"))
 
         val result =

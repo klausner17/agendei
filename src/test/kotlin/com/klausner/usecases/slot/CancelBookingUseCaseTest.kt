@@ -28,7 +28,7 @@ class CancelBookingUseCaseTest {
         )
 
     @Test
-    fun `deve cancelar reserva e limpar dados do cliente`() {
+    fun `should cancel booking and clear customer data`() {
         val captured = slot<Slot>()
         every { repository.find(slotId) } returns Result.success(bookedSlot)
         every { repository.update(capture(captured)) } returns
@@ -45,7 +45,7 @@ class CancelBookingUseCaseTest {
     }
 
     @Test
-    fun `deve retornar falha quando slot nao esta reservado`() {
+    fun `should return failure when slot is not booked`() {
         val availableSlot = bookedSlot.copy(status = Slot.Status.AVAILABLE)
         every { repository.find(slotId) } returns Result.success(availableSlot)
 
@@ -56,7 +56,7 @@ class CancelBookingUseCaseTest {
     }
 
     @Test
-    fun `deve retornar falha quando slot nao existe`() {
+    fun `should return failure when slot does not exist`() {
         every { repository.find(slotId) } returns Result.failure(NoSuchElementException("not found"))
 
         val result = useCase.execute(CancelBookingUseCase.Input(slotId = slotId))

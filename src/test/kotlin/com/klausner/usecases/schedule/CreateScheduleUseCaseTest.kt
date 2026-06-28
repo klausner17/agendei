@@ -55,7 +55,7 @@ class CreateScheduleUseCaseTest {
         )
 
     @Test
-    fun `deve criar agendamento com sucesso`() {
+    fun `should create schedule successfully`() {
         // given
         val schedule =
             Schedule(
@@ -83,7 +83,7 @@ class CreateScheduleUseCaseTest {
     }
 
     @Test
-    fun `deve retornar falha quando cliente nao existe`() {
+    fun `should return failure when customer does not exist`() {
         // given
         every { professionalRepository.find(professionalId) } returns Result.success(professional)
         every { customerRepository.find(customerId) } returns
@@ -98,7 +98,7 @@ class CreateScheduleUseCaseTest {
     }
 
     @Test
-    fun `deve retornar falha quando profissional nao existe`() {
+    fun `should return failure when professional does not exist`() {
         // given
         every { professionalRepository.find(professionalId) } returns
             Result.failure(NoSuchElementException("Professional not found"))
@@ -112,7 +112,7 @@ class CreateScheduleUseCaseTest {
     }
 
     @Test
-    fun `deve retornar 403 quando usuario nao e dono do profissional`() {
+    fun `should return 403 when user is not the professional owner`() {
         // given
         val outroUserId = UUID.randomUUID()
         every { professionalRepository.find(professionalId) } returns Result.success(professional)
@@ -136,7 +136,7 @@ class CreateScheduleUseCaseTest {
     }
 
     @Test
-    fun `deve criar agendamento sem observacao`() {
+    fun `should create schedule without observation`() {
         // given
         val schedule =
             Schedule(

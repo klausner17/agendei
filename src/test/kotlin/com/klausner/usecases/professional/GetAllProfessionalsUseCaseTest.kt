@@ -14,7 +14,7 @@ class GetAllProfessionalsUseCaseTest {
     private val useCase = GetAllProfessionalsUseCase(repository)
 
     @Test
-    fun `deve retornar lista de profissionais`() {
+    fun `should return list of professionals`() {
         val professionals =
             listOf(
                 Professional(id = UUID.randomUUID(), name = "Ana Lima"),
@@ -30,7 +30,7 @@ class GetAllProfessionalsUseCaseTest {
     }
 
     @Test
-    fun `deve retornar lista vazia quando nao ha profissionais`() {
+    fun `should return empty list when there are no professionals`() {
         every { repository.findAll() } returns Result.success(emptyList())
 
         val result = useCase.execute()
@@ -40,7 +40,7 @@ class GetAllProfessionalsUseCaseTest {
     }
 
     @Test
-    fun `deve retornar falha quando repositorio falha`() {
+    fun `should return failure when repository fails`() {
         every { repository.findAll() } returns Result.failure(RuntimeException("DB error"))
 
         val result = useCase.execute()

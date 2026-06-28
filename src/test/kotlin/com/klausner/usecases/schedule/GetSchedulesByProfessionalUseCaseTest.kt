@@ -43,7 +43,7 @@ class GetSchedulesByProfessionalUseCaseTest {
         )
 
     @Test
-    fun `deve retornar agendamentos do profissional`() {
+    fun `should return schedules for professional`() {
         // given
         val schedules = listOf(schedule(), schedule())
         every { professionalRepository.find(professionalId) } returns Result.success(professional)
@@ -59,7 +59,7 @@ class GetSchedulesByProfessionalUseCaseTest {
     }
 
     @Test
-    fun `deve retornar lista vazia quando nao ha agendamentos`() {
+    fun `should return empty list when there are no schedules`() {
         // given
         every { professionalRepository.find(professionalId) } returns Result.success(professional)
         every { scheduleRepository.findByProfessionalId(professionalId) } returns Result.success(emptyList())
@@ -73,7 +73,7 @@ class GetSchedulesByProfessionalUseCaseTest {
     }
 
     @Test
-    fun `deve retornar 403 quando usuario nao e dono do profissional`() {
+    fun `should return 403 when user is not the professional owner`() {
         // given
         val outroUserId = UUID.randomUUID()
         every { professionalRepository.find(professionalId) } returns Result.success(professional)
@@ -94,7 +94,7 @@ class GetSchedulesByProfessionalUseCaseTest {
     }
 
     @Test
-    fun `deve retornar falha quando profissional nao encontrado`() {
+    fun `should return failure when professional not found`() {
         // given
         every { professionalRepository.find(professionalId) } returns
             Result.failure(NoSuchElementException("Professional not found"))

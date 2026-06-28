@@ -31,7 +31,7 @@ class DeleteSlotUseCaseTest {
         )
 
     @Test
-    fun `deve deletar slot com sucesso`() {
+    fun `should delete slot successfully`() {
         // given
         every { slotRepository.find(slotId) } returns Result.success(slot)
         every { professionalRepository.find(professionalId) } returns Result.success(professional)
@@ -46,7 +46,7 @@ class DeleteSlotUseCaseTest {
     }
 
     @Test
-    fun `deve retornar falha quando slot nao encontrado`() {
+    fun `should return failure when slot not found`() {
         // given
         every { slotRepository.find(slotId) } returns Result.failure(NoSuchElementException("Slot not found"))
 
@@ -59,7 +59,7 @@ class DeleteSlotUseCaseTest {
     }
 
     @Test
-    fun `deve retornar 403 quando usuario nao e dono do slot`() {
+    fun `should return 403 when user is not the slot owner`() {
         // given
         val outroUserId = UUID.randomUUID()
         every { slotRepository.find(slotId) } returns Result.success(slot)

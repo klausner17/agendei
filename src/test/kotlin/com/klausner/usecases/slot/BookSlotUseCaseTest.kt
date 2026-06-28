@@ -27,7 +27,7 @@ class BookSlotUseCaseTest {
         )
 
     @Test
-    fun `deve agendar slot disponivel`() {
+    fun `should book available slot`() {
         val captured = slot<Slot>()
         every { repository.find(slotId) } returns Result.success(availableSlot)
         every { repository.update(capture(captured)) } returns
@@ -46,7 +46,7 @@ class BookSlotUseCaseTest {
     }
 
     @Test
-    fun `deve retornar falha quando slot nao esta disponivel`() {
+    fun `should return failure when slot is not available`() {
         val bookedSlot = availableSlot.copy(status = Slot.Status.BOOKED)
         every { repository.find(slotId) } returns Result.success(bookedSlot)
 
@@ -60,7 +60,7 @@ class BookSlotUseCaseTest {
     }
 
     @Test
-    fun `deve salvar serviceId e telefone quando informados`() {
+    fun `should save serviceId and phone when provided`() {
         val serviceId = UUID.randomUUID()
         val captured = slot<Slot>()
         every { repository.find(slotId) } returns Result.success(availableSlot)
@@ -83,7 +83,7 @@ class BookSlotUseCaseTest {
     }
 
     @Test
-    fun `deve retornar falha quando slot nao existe`() {
+    fun `should return failure when slot does not exist`() {
         every { repository.find(slotId) } returns Result.failure(NoSuchElementException("not found"))
 
         val result =

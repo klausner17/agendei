@@ -18,7 +18,7 @@ class UpdateProfessionalUseCaseTest {
     private val existing = Professional(id = existingId, name = "Nome Antigo", bio = "Bio Antiga")
 
     @Test
-    fun `deve atualizar campos informados mantendo os demais`() {
+    fun `should update provided fields keeping the others unchanged`() {
         val updated = existing.copy(name = "Nome Novo")
         val captured = slot<Professional>()
         every { repository.find(existingId) } returns Result.success(existing)
@@ -35,7 +35,7 @@ class UpdateProfessionalUseCaseTest {
     }
 
     @Test
-    fun `deve manter campos existentes quando input tem campos nulos`() {
+    fun `should keep existing fields when input has null fields`() {
         val captured = slot<Professional>()
         every { repository.find(existingId) } returns Result.success(existing)
         every { repository.update(capture(captured)) } returns Result.success(existing)
@@ -47,7 +47,7 @@ class UpdateProfessionalUseCaseTest {
     }
 
     @Test
-    fun `deve retornar falha quando profissional nao existe`() {
+    fun `should return failure when professional does not exist`() {
         every { repository.find(existingId) } returns Result.failure(NoSuchElementException("not found"))
 
         val result = useCase.execute(UpdateProfessionalUseCase.Input(id = existingId, name = "Novo"))
@@ -56,7 +56,7 @@ class UpdateProfessionalUseCaseTest {
     }
 
     @Test
-    fun `deve retornar falha quando update falha`() {
+    fun `should return failure when update fails`() {
         every { repository.find(existingId) } returns Result.success(existing)
         every { repository.update(any()) } returns Result.failure(RuntimeException("DB error"))
 

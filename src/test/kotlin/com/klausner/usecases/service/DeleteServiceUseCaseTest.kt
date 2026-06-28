@@ -13,7 +13,7 @@ class DeleteServiceUseCaseTest {
     private val useCase = DeleteServiceUseCase(repository)
 
     @Test
-    fun `deve deletar servico com sucesso`() {
+    fun `should delete service successfully`() {
         val id = UUID.randomUUID()
         every { repository.delete(id) } returns Result.success(Unit)
 
@@ -25,7 +25,7 @@ class DeleteServiceUseCaseTest {
     }
 
     @Test
-    fun `deve retornar falha quando repositorio falha`() {
+    fun `should return failure when repository fails`() {
         val id = UUID.randomUUID()
         every { repository.delete(id) } returns Result.failure(RuntimeException("not found"))
 

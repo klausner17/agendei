@@ -13,7 +13,7 @@ class DeleteProfessionalUseCaseTest {
     private val useCase = DeleteProfessionalUseCase(repository)
 
     @Test
-    fun `deve deletar profissional com sucesso`() {
+    fun `should delete professional successfully`() {
         val id = UUID.randomUUID()
         every { repository.delete(id) } returns Result.success(Unit)
 
@@ -24,7 +24,7 @@ class DeleteProfessionalUseCaseTest {
     }
 
     @Test
-    fun `deve retornar falha quando repositorio falha ao deletar`() {
+    fun `should return failure when repository fails to delete`() {
         val id = UUID.randomUUID()
         every { repository.delete(id) } returns Result.failure(RuntimeException("not found"))
 

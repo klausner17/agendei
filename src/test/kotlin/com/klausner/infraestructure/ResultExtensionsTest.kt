@@ -6,7 +6,7 @@ import kotlin.test.assertEquals
 
 class ResultExtensionsTest {
     @Test
-    fun `deve mapear NoSuchElementException para 404`() {
+    fun `should map NoSuchElementException to 404`() {
         // given
         val exception = NoSuchElementException("not found")
 
@@ -18,7 +18,7 @@ class ResultExtensionsTest {
     }
 
     @Test
-    fun `deve mapear IllegalArgumentException para 400`() {
+    fun `should map IllegalArgumentException to 400`() {
         // given
         val exception = IllegalArgumentException("invalid input")
 
@@ -30,7 +30,7 @@ class ResultExtensionsTest {
     }
 
     @Test
-    fun `deve mapear IllegalStateException para 422`() {
+    fun `should map IllegalStateException to 422`() {
         // given
         val exception = IllegalStateException("slot not available")
 
@@ -42,7 +42,7 @@ class ResultExtensionsTest {
     }
 
     @Test
-    fun `deve mapear excecao generica para 500`() {
+    fun `should map generic exception to 500`() {
         // given
         val exception = RuntimeException("unexpected error")
 
