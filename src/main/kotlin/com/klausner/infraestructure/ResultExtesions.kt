@@ -1,6 +1,7 @@
 package com.klausner.infraestructure
 
 import com.klausner.routes.ErrorResponse
+import com.klausner.usecases.auth.InvalidCredentialsException
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.response.respond
 import io.ktor.server.routing.RoutingContext
@@ -51,5 +52,6 @@ fun statusFor(exception: Throwable): HttpStatusCode =
         is IllegalArgumentException -> HttpStatusCode.BadRequest
         is IllegalStateException -> HttpStatusCode.UnprocessableEntity
         is SecurityException -> HttpStatusCode.Forbidden
+        is InvalidCredentialsException -> HttpStatusCode.Unauthorized
         else -> HttpStatusCode.InternalServerError
     }
