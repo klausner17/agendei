@@ -1,7 +1,9 @@
 package com.klausner.usecases.schedule
 
+import com.klausner.domains.Professional
 import com.klausner.domains.Schedule
 import com.klausner.domains.valueobjects.Interval
+import com.klausner.infraestructure.flatMap
 import com.klausner.repositories.customer.ICustomerRepository
 import com.klausner.repositories.professional.IProfessionalRepository
 import com.klausner.repositories.schedule.IScheduleRepository
@@ -15,13 +17,21 @@ class CreateScheduleUseCase(
     private val professionalRepository: IProfessionalRepository,
 ) : UseCase<CreateScheduleUseCase.Input, CreateScheduleUseCase.Output> {
     override fun execute(input: Input): Result<Output> =
-        customerRepository.find(input.customerId)
-            .flatMap { professionalRepository.find(input.professionalId) }
+        professionalRepository.find(input.professionalId)
+            .flatMap { professional -> checkOwnership(professional, input.requesterId) }
+            .flatMap { customerRepository.find(input.customerId) }
             .flatMap { scheduleRepository.create(inputToDomain(input)) }
             .map(::domainToOutput)
 
-    private fun <T, R> Result<T>.flatMap(transform: (T) -> Result<R>): Result<R> =
-        fold(onSuccess = { transform(it) }, onFailure = { Result.failure(it) })
+    private fun checkOwnership(
+        professional: Professional,
+        requesterId: UUID,
+    ): Result<Professional> =
+        if (professional.userId == requesterId) {
+            Result.success(professional)
+        } else {
+            Result.failure(SecurityException("Access denied"))
+        }
 
     private fun inputToDomain(input: Input) =
         Schedule(
@@ -49,6 +59,7 @@ class CreateScheduleUseCase(
 
     data class Input(
         val professionalId: UUID,
+        val requesterId: UUID,
         val customerId: UUID,
         val startTime: LocalDateTime,
         val endTime: LocalDateTime,
