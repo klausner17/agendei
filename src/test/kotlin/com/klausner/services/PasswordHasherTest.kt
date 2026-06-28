@@ -50,4 +50,11 @@ class PasswordHasherTest {
         // then
         assertNotEquals(first, second)
     }
+
+    @Test
+    fun `should return false for a malformed stored hash`() {
+        // when / then
+        assertFalse(passwordHasher.verify("my-secret-password", "not-a-hash"))
+        assertFalse(passwordHasher.verify("my-secret-password", "pbkdf2_sha256\$210000\$!!!\$@@@"))
+    }
 }

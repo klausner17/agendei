@@ -22,8 +22,10 @@ class PasswordHasher {
         val parts = stored.split("$")
         if (parts.size != 4 || parts[0] != PREFIX) return false
         val iterations = parts[1].toIntOrNull() ?: return false
-        val derived = deriveKey(password, decode(parts[2]), iterations)
-        return MessageDigest.isEqual(decode(parts[3]), derived)
+        return runCatching {
+            val derived = deriveKey(password, decode(parts[2]), iterations)
+            MessageDigest.isEqual(decode(parts[3]), derived)
+        }.getOrDefault(false)
     }
 
     private fun deriveKey(
@@ -39,7 +41,7 @@ class PasswordHasher {
 
     private fun decode(value: String): ByteArray = Base64.getDecoder().decode(value)
 
-    companion object {
+    private companion object {
         private const val PREFIX = "pbkdf2_sha256"
         private const val ALGORITHM = "PBKDF2WithHmacSHA256"
         private const val ITERATIONS = 210_000
