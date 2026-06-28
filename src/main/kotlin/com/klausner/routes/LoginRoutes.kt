@@ -3,13 +3,14 @@ package com.klausner.routes
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
 import com.klausner.infraestructure.foldAndRespond
-import com.klausner.usecases.auth.GoogleAuthUseCase
-import io.ktor.http.HttpStatusCode
+import com.klausner.usecases.auth.LoginUseCase
+import com.klausner.usecases.auth.RegisterUserUseCase
 import io.ktor.server.auth.AuthenticationConfig
 import io.ktor.server.auth.jwt.JWTPrincipal
 import io.ktor.server.auth.jwt.jwt
+import io.ktor.server.plugins.ratelimit.RateLimitName
+import io.ktor.server.plugins.ratelimit.rateLimit
 import io.ktor.server.request.receive
-import io.ktor.server.response.respond
 import io.ktor.server.routing.Route
 import io.ktor.server.routing.post
 import org.koin.java.KoinJavaComponent.getKoin
@@ -35,28 +36,31 @@ fun AuthenticationConfig.config() {
 }
 
 fun Route.loginRoutes() {
-    val googleAuthUseCase: GoogleAuthUseCase by getKoin().inject()
+    val registerUserUseCase: RegisterUserUseCase by getKoin().inject()
+    val loginUseCase: LoginUseCase by getKoin().inject()
 
-    post("/api/v1/auth/google") {
-        try {
-            val request = call.receive<GoogleAuthRequest>()
+    rateLimit(RateLimitName("auth")) {
+        post("/api/v1/auth/register") {
+            val request = call.receive<RegisterRequest>()
+            val input = RegisterUserUseCase.Input(request.email, request.name, request.password)
+            foldAndRespond(registerUserUseCase.execute(input))
+        }
 
-            if (request.credential.isBlank()) {
-                call.respond(HttpStatusCode.BadRequest, mapOf("message" to "Credential é obrigatório"))
-                return@post
-            }
-
-            val input = GoogleAuthUseCase.Input(credential = request.credential)
-            foldAndRespond(googleAuthUseCase.execute(input))
-        } catch (e: Exception) {
-            call.respond(
-                HttpStatusCode.Unauthorized,
-                mapOf("message" to "Falha na autenticação com Google: ${e.message}"),
-            )
+        post("/api/v1/auth/login") {
+            val request = call.receive<LoginRequest>()
+            val input = LoginUseCase.Input(request.email, request.password)
+            foldAndRespond(loginUseCase.execute(input))
         }
     }
 }
 
-data class GoogleAuthRequest(
-    val credential: String,
+data class RegisterRequest(
+    val email: String,
+    val name: String,
+    val password: String,
+)
+
+data class LoginRequest(
+    val email: String,
+    val password: String,
 )
