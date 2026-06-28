@@ -39,7 +39,7 @@ class CreateSlotUseCaseTest {
         )
 
     @Test
-    fun `deve criar slot unico quando recorrencia nao informada`() {
+    fun `should create single slot when recurrence is not provided`() {
         // given
         every { professionalRepository.find(professionalId) } returns Result.success(professional)
         every { slotRepository.create(any()) } returns Result.success(slot())
@@ -55,7 +55,7 @@ class CreateSlotUseCaseTest {
     }
 
     @Test
-    fun `deve criar slot unico quando recorrencia igual a 1`() {
+    fun `should create single slot when recurrence is 1`() {
         // given
         every { professionalRepository.find(professionalId) } returns Result.success(professional)
         every { slotRepository.create(any()) } returns Result.success(slot())
@@ -69,7 +69,7 @@ class CreateSlotUseCaseTest {
     }
 
     @Test
-    fun `deve criar multiplos slots com recorrencia semanal`() {
+    fun `should create multiple slots with weekly recurrence`() {
         // given
         val slots =
             listOf(
@@ -91,7 +91,7 @@ class CreateSlotUseCaseTest {
     }
 
     @Test
-    fun `deve retornar falha quando repositorio falha`() {
+    fun `should return failure when repository fails`() {
         // given
         every { professionalRepository.find(professionalId) } returns Result.success(professional)
         every { slotRepository.create(any()) } returns Result.failure(RuntimeException("DB error"))
@@ -104,7 +104,7 @@ class CreateSlotUseCaseTest {
     }
 
     @Test
-    fun `deve retornar 403 quando usuario nao e dono do profissional`() {
+    fun `should return 403 when user is not the professional owner`() {
         // given
         val outroUserId = UUID.randomUUID()
         every { professionalRepository.find(professionalId) } returns Result.success(professional)

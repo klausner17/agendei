@@ -17,7 +17,7 @@ class CreateProfessionalUseCaseTest {
     private val userId = UUID.randomUUID()
 
     @Test
-    fun `deve criar profissional com sucesso`() {
+    fun `should create professional successfully`() {
         // given
         val professional = Professional(id = UUID.randomUUID(), userId = userId, name = "Ana Lima")
         every { repository.create(any()) } returns Result.success(professional)
@@ -32,7 +32,7 @@ class CreateProfessionalUseCaseTest {
     }
 
     @Test
-    fun `deve retornar falha quando repositorio falha`() {
+    fun `should return failure when repository fails`() {
         // given
         every { repository.create(any()) } returns Result.failure(RuntimeException("DB error"))
 

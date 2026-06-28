@@ -16,7 +16,7 @@ class GetServicesByProfessionalIdUseCaseTest {
     private val professionalId = UUID.randomUUID()
 
     @Test
-    fun `deve retornar servicos do profissional`() {
+    fun `should return services for professional`() {
         val services =
             listOf(
                 Service(
@@ -45,7 +45,7 @@ class GetServicesByProfessionalIdUseCaseTest {
     }
 
     @Test
-    fun `deve retornar lista vazia quando profissional nao tem servicos`() {
+    fun `should return empty list when professional has no services`() {
         every { repository.findByProfessionalId(professionalId) } returns Result.success(emptyList())
 
         val result = useCase.execute(GetServicesByProfessionalIdUseCase.Input(professionalId = professionalId))
@@ -55,7 +55,7 @@ class GetServicesByProfessionalIdUseCaseTest {
     }
 
     @Test
-    fun `deve retornar falha quando repositorio falha`() {
+    fun `should return failure when repository fails`() {
         every { repository.findByProfessionalId(professionalId) } returns Result.failure(RuntimeException("DB error"))
 
         val result = useCase.execute(GetServicesByProfessionalIdUseCase.Input(professionalId = professionalId))

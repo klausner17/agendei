@@ -16,7 +16,7 @@ class CreateCustomerUseCaseTest {
     private val useCase = CreateCustomerUseCase(customerRepository)
 
     @Test
-    fun `deve criar cliente com sucesso`() {
+    fun `should create customer successfully`() {
         // given
         val customerId = UUID.randomUUID()
         val customer =
@@ -55,7 +55,7 @@ class CreateCustomerUseCaseTest {
     }
 
     @Test
-    fun `deve criar cliente sem email`() {
+    fun `should create customer without email`() {
         // given
         val customer =
             Customer(
@@ -82,7 +82,7 @@ class CreateCustomerUseCaseTest {
     }
 
     @Test
-    fun `deve retornar falha quando repositorio falha`() {
+    fun `should return failure when repository fails`() {
         // given
         every { customerRepository.create(any()) } returns Result.failure(RuntimeException("DB error"))
 

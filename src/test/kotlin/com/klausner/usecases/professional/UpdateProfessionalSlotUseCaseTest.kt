@@ -22,7 +22,7 @@ class UpdateProfessionalSlotUseCaseTest {
         Interval(startTime = LocalDateTime.of(2026, 7, 1, 9, 0), endTime = LocalDateTime.of(2026, 7, 1, 10, 0))
 
     @Test
-    fun `deve substituir slots do profissional pelos slots informados`() {
+    fun `should replace professional slots with provided slots`() {
         val captured = captureSlot<Professional>()
         every { repository.find(professionalId) } returns Result.success(professional)
         every { repository.update(capture(captured)) } returns Result.success(professional)
@@ -37,7 +37,7 @@ class UpdateProfessionalSlotUseCaseTest {
     }
 
     @Test
-    fun `deve retornar falha quando profissional nao existe`() {
+    fun `should return failure when professional does not exist`() {
         every { repository.find(professionalId) } returns Result.failure(NoSuchElementException("not found"))
 
         val result =

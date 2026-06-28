@@ -14,7 +14,7 @@ class GetProfessionalUseCaseTest {
     private val useCase = GetProfessionalUseCase(repository)
 
     @Test
-    fun `deve retornar profissional pelo id`() {
+    fun `should return professional by id`() {
         val id = UUID.randomUUID()
         val professional = Professional(id = id, name = "Ana Lima", bio = "Cabeleireira")
         every { repository.find(id) } returns Result.success(professional)
@@ -29,7 +29,7 @@ class GetProfessionalUseCaseTest {
     }
 
     @Test
-    fun `deve retornar falha quando profissional nao existe`() {
+    fun `should return failure when professional does not exist`() {
         val id = UUID.randomUUID()
         every { repository.find(id) } returns Result.failure(NoSuchElementException("not found"))
 

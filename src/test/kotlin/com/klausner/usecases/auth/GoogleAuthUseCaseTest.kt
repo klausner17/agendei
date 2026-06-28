@@ -44,7 +44,7 @@ class GoogleAuthUseCaseTest {
     }
 
     @Test
-    fun `deve autenticar usuario existente encontrado pelo googleId`() {
+    fun `should authenticate existing user found by googleId`() {
         every { googleAuthService.verifyIdToken("valid-token") } returns mockPayload()
         every { userRepository.findByGoogleId("google-123") } returns Result.success(existingUser)
         every { jwtService.generateToken(existingUser) } returns "jwt-token"
@@ -59,7 +59,7 @@ class GoogleAuthUseCaseTest {
     }
 
     @Test
-    fun `deve autenticar usuario existente encontrado pelo email quando nao encontrado pelo googleId`() {
+    fun `should authenticate existing user found by email when not found by googleId`() {
         every { googleAuthService.verifyIdToken("valid-token") } returns mockPayload()
         every { userRepository.findByGoogleId("google-123") } returns Result.success(null)
         every { userRepository.findByEmail("ana@email.com") } returns Result.success(existingUser)
@@ -73,7 +73,7 @@ class GoogleAuthUseCaseTest {
     }
 
     @Test
-    fun `deve criar novo usuario quando nao encontrado em nenhuma busca`() {
+    fun `should create new user when not found by any search`() {
         every { googleAuthService.verifyIdToken("valid-token") } returns mockPayload()
         every { userRepository.findByGoogleId("google-123") } returns Result.success(null)
         every { userRepository.findByEmail("ana@email.com") } returns Result.success(null)
@@ -87,7 +87,7 @@ class GoogleAuthUseCaseTest {
     }
 
     @Test
-    fun `deve retornar falha quando credencial google e invalida`() {
+    fun `should return failure when Google credential is invalid`() {
         every { googleAuthService.verifyIdToken("invalid-token") } returns null
 
         val result = useCase.execute(GoogleAuthUseCase.Input(credential = "invalid-token"))
@@ -97,7 +97,7 @@ class GoogleAuthUseCaseTest {
     }
 
     @Test
-    fun `deve retornar falha quando criacao de usuario falha`() {
+    fun `should return failure when user creation fails`() {
         every { googleAuthService.verifyIdToken("valid-token") } returns mockPayload()
         every { userRepository.findByGoogleId("google-123") } returns Result.success(null)
         every { userRepository.findByEmail("ana@email.com") } returns Result.success(null)

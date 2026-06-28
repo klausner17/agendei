@@ -31,7 +31,7 @@ class GetSlotsByProfessionalIdUseCaseTest {
     private fun input() = GetSlotsByProfessionalIdUseCase.Input(professionalId = professionalId, requesterId = userId)
 
     @Test
-    fun `deve retornar slots do profissional`() {
+    fun `should return slots for professional`() {
         // given
         val slots = listOf(slot(9), slot(10), slot(11))
         every { professionalRepository.find(professionalId) } returns Result.success(professional)
@@ -47,7 +47,7 @@ class GetSlotsByProfessionalIdUseCaseTest {
     }
 
     @Test
-    fun `deve retornar lista vazia quando profissional nao tem slots`() {
+    fun `should return empty list when professional has no slots`() {
         // given
         every { professionalRepository.find(professionalId) } returns Result.success(professional)
         every { slotRepository.findByProfessionalId(professionalId) } returns Result.success(emptyList())
@@ -61,7 +61,7 @@ class GetSlotsByProfessionalIdUseCaseTest {
     }
 
     @Test
-    fun `deve retornar falha quando repositorio falha`() {
+    fun `should return failure when repository fails`() {
         // given
         every { professionalRepository.find(professionalId) } returns Result.success(professional)
         every { slotRepository.findByProfessionalId(professionalId) } returns
@@ -75,7 +75,7 @@ class GetSlotsByProfessionalIdUseCaseTest {
     }
 
     @Test
-    fun `deve retornar 403 quando usuario nao e dono do profissional`() {
+    fun `should return 403 when user is not the professional owner`() {
         // given
         val outroUserId = UUID.randomUUID()
         every { professionalRepository.find(professionalId) } returns Result.success(professional)

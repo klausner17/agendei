@@ -147,7 +147,7 @@ Seguir as regras de Object Calisthenics em todo código novo:
 ## Testes
 
 - **Localização**: `src/test/kotlin/com/klausner/{camada}/{dominio}/`
-- **Nomenclatura**: `{Classe}Test.kt`, métodos em português com backticks: `` `deve fazer X quando Y` ``
+- **Nomenclatura**: `{Classe}Test.kt`, métodos em inglês com backticks: `` `should do X when Y` ``
 - **Padrão**: mockar apenas o que está na fronteira do use case (repositórios, serviços externos). Sem mocks de lógica interna.
 - **Rodar**: `./gradlew test`
 
