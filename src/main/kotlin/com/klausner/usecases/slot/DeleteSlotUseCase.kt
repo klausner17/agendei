@@ -8,9 +8,7 @@ import java.util.UUID
 class DeleteSlotUseCase(
     private val repository: ISlotRepository,
 ) : UseCase<Input, Unit> {
-
-    override fun execute(input: Input): Result<Unit> =
-        repository.delete(input.slotId)
+    override fun execute(input: Input): Result<Unit> = repository.delete(input.slotId)
 
     data class Input(val slotId: UUID)
 }

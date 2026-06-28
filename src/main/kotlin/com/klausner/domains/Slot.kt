@@ -13,6 +13,5 @@ data class Slot(
     val customerName: String? = null,
     val customerPhone: String? = null,
 ) : Domain {
-
     enum class Status { AVAILABLE, BOOKED, CANCELLED }
 }

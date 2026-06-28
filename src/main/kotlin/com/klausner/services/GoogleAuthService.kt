@@ -7,10 +7,10 @@ import com.google.api.client.json.gson.GsonFactory
 import java.util.Collections
 
 class GoogleAuthService(private val clientId: String) {
-    
-    private val verifier = GoogleIdTokenVerifier.Builder(NetHttpTransport(), GsonFactory())
-        .setAudience(Collections.singletonList(clientId))
-        .build()
+    private val verifier =
+        GoogleIdTokenVerifier.Builder(NetHttpTransport(), GsonFactory())
+            .setAudience(Collections.singletonList(clientId))
+            .build()
 
     fun verifyIdToken(idTokenString: String): GoogleIdToken.Payload? {
         return try {
@@ -21,4 +21,3 @@ class GoogleAuthService(private val clientId: String) {
         }
     }
 }
-

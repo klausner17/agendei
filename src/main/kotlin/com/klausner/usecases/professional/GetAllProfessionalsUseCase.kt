@@ -9,13 +9,12 @@ import java.util.UUID
 class GetAllProfessionalsUseCase(
     private val professionalRepository: IProfessionalRepository,
 ) : UseCaseWithoutOutput<Output> {
-
     override fun execute(): Result<Output> =
         professionalRepository
             .findAll()
             .map { professionals ->
                 Output(
-                    professionals = professionals.map { Output.ProfessionalOutput.fromDomain(it) }
+                    professionals = professionals.map { Output.ProfessionalOutput.fromDomain(it) },
                 )
             }
 
@@ -36,4 +35,3 @@ class GetAllProfessionalsUseCase(
         }
     }
 }
-

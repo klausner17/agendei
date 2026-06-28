@@ -2,6 +2,7 @@ plugins {
     kotlin("jvm") version "2.1.0"
     kotlin("plugin.serialization") version "2.1.0"
     id("com.gradleup.shadow") version "8.3.8"
+    id("org.jlleitschuh.gradle.ktlint") version "12.1.2"
     application
 }
 
@@ -19,7 +20,7 @@ repositories {
 }
 
 val exposedVersion = "0.59.0"
-val ktor_version = "3.1.0"
+val ktorVersion = "3.1.0"
 
 dependencies {
     implementation("com.github.ProjectMapK:KMapper:0.36")
@@ -29,16 +30,15 @@ dependencies {
     implementation("org.jetbrains.exposed:exposed-json:$exposedVersion")
     implementation("org.jetbrains.exposed:exposed-jdbc:$exposedVersion")
     implementation("org.jetbrains.exposed:exposed-kotlin-datetime:$exposedVersion")
-    implementation("io.ktor:ktor-server-status-pages:$ktor_version")
-    implementation("io.ktor:ktor-server-core:$ktor_version")
-    implementation("io.ktor:ktor-server-netty:$ktor_version")
-    implementation("io.ktor:ktor-server-content-negotiation:$ktor_version")
-    implementation("io.ktor:ktor-server-status-pages:$ktor_version")
-    implementation("io.ktor:ktor-serialization-jackson:${ktor_version}")
-    implementation("io.ktor:ktor-server-auth:${ktor_version}")
-    implementation("io.ktor:ktor-server-auth-jwt:${ktor_version}")
-    implementation("io.ktor:ktor-client-apache:${ktor_version}")
-    implementation("io.ktor:ktor-server-cors:${ktor_version}")
+    implementation("io.ktor:ktor-server-status-pages:$ktorVersion")
+    implementation("io.ktor:ktor-server-core:$ktorVersion")
+    implementation("io.ktor:ktor-server-netty:$ktorVersion")
+    implementation("io.ktor:ktor-server-content-negotiation:$ktorVersion")
+    implementation("io.ktor:ktor-serialization-jackson:$ktorVersion")
+    implementation("io.ktor:ktor-server-auth:$ktorVersion")
+    implementation("io.ktor:ktor-server-auth-jwt:$ktorVersion")
+    implementation("io.ktor:ktor-client-apache:$ktorVersion")
+    implementation("io.ktor:ktor-server-cors:$ktorVersion")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.20.0")
     implementation("org.slf4j:slf4j-api:2.0.16")
     implementation("ch.qos.logback:logback-core:1.5.16")
@@ -48,7 +48,7 @@ dependencies {
     implementation("com.google.api-client:google-api-client:2.7.2")
     implementation("com.auth0:java-jwt:4.4.0")
 
-    testImplementation("io.ktor:ktor-server-test-host:$ktor_version")
+    testImplementation("io.ktor:ktor-server-test-host:$ktorVersion")
     testImplementation(kotlin("test"))
     testImplementation("io.mockk:mockk:1.13.16")
 }

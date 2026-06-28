@@ -10,7 +10,6 @@ import java.util.UUID
 class CancelBookingUseCase(
     private val repository: ISlotRepository,
 ) : UseCase<Input, Unit> {
-
     override fun execute(input: Input): Result<Unit> =
         repository
             .find(input.slotId)

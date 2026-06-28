@@ -14,40 +14,41 @@ import java.util.UUID
 class UpdateProfessionalUseCase(
     private val professionalRepository: IProfessionalRepository,
 ) : UseCase<Input, Output> {
-
     override fun execute(input: Input): Result<Output> {
         return professionalRepository.find(input.id)
             .map {
-                val updatedProfessional = it.copy(
-                    name = input.name ?: it.name,
-                    bio = input.bio ?: it.bio,
-                    address = input.address ?: it.address,
-                    password = input.password ?: it.password,
-                    phone = input.phone ?: it.phone,
-                    instagram = input.instagram ?: it.instagram,
-                    facebook = input.facebook ?: it.facebook,
-                    photo = input.photo ?: it.photo,
-                    workHours = input.workHours ?: it.workHours
-                )
+                val updatedProfessional =
+                    it.copy(
+                        name = input.name ?: it.name,
+                        bio = input.bio ?: it.bio,
+                        address = input.address ?: it.address,
+                        password = input.password ?: it.password,
+                        phone = input.phone ?: it.phone,
+                        instagram = input.instagram ?: it.instagram,
+                        facebook = input.facebook ?: it.facebook,
+                        photo = input.photo ?: it.photo,
+                        workHours = input.workHours ?: it.workHours,
+                    )
 
                 professionalRepository.update(updatedProfessional)
                     .map { domainToOutput(it) }
             }.flatten()
     }
 
-    private fun domainToOutput(domain: Professional) = Output(
-        id = domain.id,
-        storeId = domain.storeId,
-        name = domain.name,
-        bio = domain.bio,
-        address = domain.address,
-        password = domain.password,
-        phone = domain.phone,
-        instagram = domain.instagram,
-        facebook = domain.facebook,
-        photo = domain.photo,
-        workHours = domain.workHours
-    )
+    private fun domainToOutput(domain: Professional) =
+        Output(
+            id = domain.id,
+            storeId = domain.storeId,
+            name = domain.name,
+            bio = domain.bio,
+            address = domain.address,
+            password = domain.password,
+            phone = domain.phone,
+            instagram = domain.instagram,
+            facebook = domain.facebook,
+            photo = domain.photo,
+            workHours = domain.workHours,
+        )
 
     data class Input(
         val id: UUID,
@@ -60,7 +61,7 @@ class UpdateProfessionalUseCase(
         val facebook: String? = null,
         val photo: String? = null,
         val doLogin: Boolean? = null,
-        val workHours: List<Interval>? = null
+        val workHours: List<Interval>? = null,
     )
 
     data class Output(
@@ -74,6 +75,6 @@ class UpdateProfessionalUseCase(
         val instagram: String?,
         val facebook: String?,
         val photo: String?,
-        val workHours: List<Interval>?
+        val workHours: List<Interval>?,
     )
 }

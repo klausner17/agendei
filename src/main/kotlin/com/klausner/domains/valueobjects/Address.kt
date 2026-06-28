@@ -10,9 +10,8 @@ data class Address(
     val city: String,
     val state: String,
     val country: String,
-    val zipCode: String
+    val zipCode: String,
 ) : ValueObject {
-
     data class PossibleAddress(
         val street: String?,
         val number: String?,
@@ -21,11 +20,10 @@ data class Address(
         val city: String?,
         val state: String?,
         val country: String?,
-        val zipCode: String?
+        val zipCode: String?,
     ) {
-
-        fun toAddressOrNull() = takeIf { city != null && state != null && country != null && zipCode != null }
-            ?.let { Address(street, number, complement, neighborhood, city!!, state!!, country!!, zipCode!!) }
+        fun toAddressOrNull() =
+            takeIf { city != null && state != null && country != null && zipCode != null }
+                ?.let { Address(street, number, complement, neighborhood, city!!, state!!, country!!, zipCode!!) }
     }
-
 }

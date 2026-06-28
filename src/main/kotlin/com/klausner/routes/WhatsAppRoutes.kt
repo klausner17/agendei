@@ -13,7 +13,6 @@ import org.slf4j.LoggerFactory
 
 fun Route.whatsappRoutes() {
     route("/whatsapp") {
-
         // Verificação do webhook (GET)
         get {
             val mode = call.request.queryParameters["hub.mode"]

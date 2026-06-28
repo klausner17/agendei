@@ -74,13 +74,14 @@ fun Route.professionalRoutes() {
                 post {
                     val id = UUID.fromString(call.parameters["id"]!!)
                     val request = call.receive<CreateSlotRequest>()
-                    val input = CreateSlotUseCase.Input(
-                        professionalId = id,
-                        serviceId = request.serviceId,
-                        startTime = request.startTime,
-                        endTime = request.endTime,
-                        recurrenceWeeks = request.recurrenceWeeks,
-                    )
+                    val input =
+                        CreateSlotUseCase.Input(
+                            professionalId = id,
+                            serviceId = request.serviceId,
+                            startTime = request.startTime,
+                            endTime = request.endTime,
+                            recurrenceWeeks = request.recurrenceWeeks,
+                        )
                     foldAndRespond(createSlotUseCase.execute(input))
                 }
                 route("/{slotId}") {
@@ -91,12 +92,13 @@ fun Route.professionalRoutes() {
                     patch("/book") {
                         val slotId = UUID.fromString(call.parameters["slotId"]!!)
                         val request = call.receive<BookSlotRequest>()
-                        val input = BookSlotUseCase.Input(
-                            slotId = slotId,
-                            serviceId = request.serviceId,
-                            customerName = request.customerName,
-                            customerPhone = request.customerPhone,
-                        )
+                        val input =
+                            BookSlotUseCase.Input(
+                                slotId = slotId,
+                                serviceId = request.serviceId,
+                                customerName = request.customerName,
+                                customerPhone = request.customerPhone,
+                            )
                         foldAndRespond(bookSlotUseCase.execute(input))
                     }
                     patch("/cancel") {

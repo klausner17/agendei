@@ -12,7 +12,6 @@ import java.util.UUID
 class UpdateProfessionalSlotUseCase(
     private val professionalRepository: IProfessionalRepository,
 ) : UseCase<Input, Output> {
-
     override fun execute(input: Input): Result<Output> {
         return professionalRepository.find(input.professionalId)
             .map { insertSlots(it, input.slot) }
@@ -20,16 +19,19 @@ class UpdateProfessionalSlotUseCase(
             .map { Output(it) }
     }
 
-    private fun insertSlots(professional: Professional, slots: List<Interval>) = professional.copy(
-        slots = professional.slots
+    private fun insertSlots(
+        professional: Professional,
+        slots: List<Interval>,
+    ) = professional.copy(
+        slots = professional.slots,
     )
 
     data class Input(
         val professionalId: UUID,
-        val slot: List<Interval>
+        val slot: List<Interval>,
     )
 
     data class Output(
-        val professional: Professional
+        val professional: Professional,
     )
 }

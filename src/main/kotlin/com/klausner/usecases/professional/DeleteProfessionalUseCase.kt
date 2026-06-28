@@ -7,9 +7,8 @@ import org.slf4j.LoggerFactory
 import java.util.UUID
 
 class DeleteProfessionalUseCase(
-    private val IProfessionalRepository: IProfessionalRepository
+    private val IProfessionalRepository: IProfessionalRepository,
 ) : UseCase<UUID, Unit> {
-
     override fun execute(input: UUID): Result<Unit> {
         return IProfessionalRepository.delete(input)
             .onSuccess { logger.info("Professional {} deleted with success", input) }

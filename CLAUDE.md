@@ -116,3 +116,42 @@ single { CreateNovoDominioUseCase(get()) }
 - **Naming**: Código em inglês, rotas REST em inglês.
 - **Rotas protegidas**: Tudo sob `authenticate("jwt-auth")` em `Main.kt`.
 - **Rotas públicas**: Definidas fora do bloco `authenticate` (ex: loginRoutes).
+- **Lint**: `./gradlew ktlintCheck` — formato enforçado via `.editorconfig`. Rode antes de commitar.
+
+## Object Calisthenics
+
+Seguir as regras de Object Calisthenics em todo código novo:
+
+1. **Um nível de indentação por método** — extraia blocos internos para métodos privados.
+2. **Sem `else`** — use early return ou `when` exhaustivo. Prefira `if (condition) return` ao `if/else`.
+3. **Primitivos com significado → Value Objects** — `String` para email, telefone, dinheiro viram classes (`Phone`, `Money`, etc.). Já existe em `domains/valueobjects/`.
+4. **Coleções de primeira classe** — encapsule `List<T>` com comportamento em uma classe dedicada, em vez de passar listas soltas.
+5. **Um ponto por linha** — evite chaining longo (`a.b().c().d()`). Quebre em variáveis intermediárias descritivas.
+6. **Sem abreviações** — `professional` não `prof`, `repository` não `repo`, `input` não `inp`.
+7. **Entidades pequenas** — classes com até ~50 linhas, métodos com até ~10 linhas. Se crescer, extraia.
+8. **Classes focadas** — cada classe tem uma única razão para mudar. Use cases fazem uma coisa só.
+9. **Sem getters/setters expostos desnecessariamente** — `data class` com `val` é o padrão; evite mutabilidade.
+
+## Testes
+
+- **Localização**: `src/test/kotlin/com/klausner/{camada}/{dominio}/`
+- **Nomenclatura**: `{Classe}Test.kt`, métodos em português com backticks: `` `deve fazer X quando Y` ``
+- **Padrão**: mockar apenas o que está na fronteira do use case (repositórios, serviços externos). Sem mocks de lógica interna.
+- **Rodar**: `./gradlew test`
+
+```kotlin
+class CreateXyzUseCaseTest {
+    private val repository = mockk<IXyzRepository>()
+    private val useCase = CreateXyzUseCase(repository)
+
+    @Test
+    fun `deve criar xyz com sucesso`() {
+        every { repository.create(any()) } returns Result.success(xyz)
+
+        val result = useCase.execute(CreateXyzUseCase.Input(...))
+
+        assertTrue(result.isSuccess)
+        verify(exactly = 1) { repository.create(any()) }
+    }
+}
+```

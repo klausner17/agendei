@@ -6,9 +6,8 @@ data class Phone(
     val countryCode: String,
     val areaCode: String,
     val number: String,
-    val isWhatsApp: Boolean
+    val isWhatsApp: Boolean,
 ) : ValueObject {
-
     fun toFormattedString(): String {
         return "+$countryCode ($areaCode) $number"
     }
@@ -18,13 +17,15 @@ data class Phone(
     }
 
     companion object {
-
-        fun fromString(phone: String, isWhatsApp: Boolean): Phone {
+        fun fromString(
+            phone: String,
+            isWhatsApp: Boolean,
+        ): Phone {
             return Phone(
                 countryCode = phone.substring(0, 2),
                 areaCode = phone.substring(2, 4),
                 number = phone.substring(4, phone.length),
-                isWhatsApp = isWhatsApp
+                isWhatsApp = isWhatsApp,
             )
         }
     }

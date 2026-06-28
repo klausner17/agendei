@@ -11,7 +11,6 @@ import java.util.UUID
 class DeleteServiceUseCase(
     private val serviceRepository: IServiceRepository,
 ) : UseCase<Input, Output> {
-
     override fun execute(input: Input): Result<Output> {
         return serviceRepository
             .delete(input.id)

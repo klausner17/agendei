@@ -10,9 +10,9 @@ data class Schedule(
     val observation: String,
     val interval: Interval,
     val type: Type = Type.AVAILABLE,
-    val status: Status = Status.CREATED
+    val status: Status = Status.CREATED,
 ) : AggregateRoot {
-
     enum class Type { BLOCK, AVAILABLE }
+
     enum class Status { CREATED, CONCLUDED, CANCELLED }
 }
