@@ -21,12 +21,16 @@ import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
 import io.ktor.server.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.server.plugins.cors.routing.CORS
+import io.ktor.server.plugins.origin
+import io.ktor.server.plugins.ratelimit.RateLimit
+import io.ktor.server.plugins.ratelimit.RateLimitName
 import io.ktor.server.plugins.statuspages.StatusPages
 import io.ktor.server.routing.get
 import io.ktor.server.routing.route
 import io.ktor.server.routing.routing
 import org.jetbrains.exposed.sql.Database
 import org.koin.core.context.startKoin
+import kotlin.time.Duration.Companion.seconds
 
 fun main() {
     embeddedServer(factory = Netty, 8080) {
@@ -59,6 +63,16 @@ fun main() {
         }
         install(StatusPages) { config() }
         install(Authentication) { config() }
+        install(RateLimit) {
+            global {
+                rateLimiter(limit = 100, refillPeriod = 60.seconds)
+                requestKey { call -> call.request.origin.remoteHost }
+            }
+            register(RateLimitName("auth")) {
+                rateLimiter(limit = 5, refillPeriod = 60.seconds)
+                requestKey { call -> call.request.origin.remoteHost }
+            }
+        }
 
         routing {
             loginRoutes()

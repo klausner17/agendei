@@ -8,6 +8,8 @@ import com.klausner.usecases.auth.RegisterUserUseCase
 import io.ktor.server.auth.AuthenticationConfig
 import io.ktor.server.auth.jwt.JWTPrincipal
 import io.ktor.server.auth.jwt.jwt
+import io.ktor.server.plugins.ratelimit.RateLimitName
+import io.ktor.server.plugins.ratelimit.rateLimit
 import io.ktor.server.request.receive
 import io.ktor.server.routing.Route
 import io.ktor.server.routing.post
@@ -37,16 +39,18 @@ fun Route.loginRoutes() {
     val registerUserUseCase: RegisterUserUseCase by getKoin().inject()
     val loginUseCase: LoginUseCase by getKoin().inject()
 
-    post("/api/v1/auth/register") {
-        val request = call.receive<RegisterRequest>()
-        val input = RegisterUserUseCase.Input(request.email, request.name, request.password)
-        foldAndRespond(registerUserUseCase.execute(input))
-    }
+    rateLimit(RateLimitName("auth")) {
+        post("/api/v1/auth/register") {
+            val request = call.receive<RegisterRequest>()
+            val input = RegisterUserUseCase.Input(request.email, request.name, request.password)
+            foldAndRespond(registerUserUseCase.execute(input))
+        }
 
-    post("/api/v1/auth/login") {
-        val request = call.receive<LoginRequest>()
-        val input = LoginUseCase.Input(request.email, request.password)
-        foldAndRespond(loginUseCase.execute(input))
+        post("/api/v1/auth/login") {
+            val request = call.receive<LoginRequest>()
+            val input = LoginUseCase.Input(request.email, request.password)
+            foldAndRespond(loginUseCase.execute(input))
+        }
     }
 }
 
