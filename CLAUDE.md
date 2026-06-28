@@ -108,6 +108,18 @@ single { NovoDominioRepository(get()) } bind INovoDominioRepository::class
 single { CreateNovoDominioUseCase(get()) }
 ```
 
+## OpenAPI
+
+O arquivo de especificação fica em `docs/openapi.yaml`.
+
+**Sempre que qualquer arquivo em `routes/` for criado ou modificado, verifique se o `docs/openapi.yaml` precisa ser atualizado e aplique as mudanças.**
+
+Itens a verificar:
+- Novos endpoints → adicionar path + operação
+- Parâmetros, request body ou response alterados → atualizar schema correspondente
+- Rota removida → remover do arquivo
+- Novo schema (domain/value object) → adicionar em `components/schemas`
+
 ## Convenções
 
 - **Error handling**: Kotlin `Result<T>` em toda a camada de negócio. Repositórios usam `runCatching {}`.

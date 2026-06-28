@@ -1,0 +1,771 @@
+openapi: 3.0.3
+info:
+  title: Agendei API
+  description: API de agendamento por slots para profissionais
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:8080
+    description: Desenvolvimento local
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    Phone:
+      type: object
+      required: [countryCode, areaCode, number, isWhatsApp]
+      properties:
+        countryCode:
+          type: string
+          example: "55"
+        areaCode:
+          type: string
+          example: "11"
+        number:
+          type: string
+          example: "987654321"
+        isWhatsApp:
+          type: boolean
+
+    Address:
+      type: object
+      required: [city, state, country, zipCode]
+      properties:
+        street:
+          type: string
+          nullable: true
+        number:
+          type: string
+          nullable: true
+        complement:
+          type: string
+          nullable: true
+        neighborhood:
+          type: string
+          nullable: true
+        city:
+          type: string
+        state:
+          type: string
+        country:
+          type: string
+        zipCode:
+          type: string
+
+    Interval:
+      type: object
+      required: [startTime, endTime]
+      properties:
+        startTime:
+          type: string
+          format: date-time
+        endTime:
+          type: string
+          format: date-time
+        daysOfWeek:
+          type: array
+          nullable: true
+          items:
+            type: string
+            enum: [MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY]
+
+    Slot:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        professionalId:
+          type: string
+          format: uuid
+        serviceId:
+          type: string
+          format: uuid
+          nullable: true
+        startTime:
+          type: string
+          format: date-time
+        endTime:
+          type: string
+          format: date-time
+        status:
+          type: string
+          enum: [AVAILABLE, BOOKED]
+        customerName:
+          type: string
+          nullable: true
+        customerPhone:
+          type: string
+          nullable: true
+
+    Schedule:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        professionalId:
+          type: string
+          format: uuid
+        customerId:
+          type: string
+          format: uuid
+        observation:
+          type: string
+        startTime:
+          type: string
+          format: date-time
+        endTime:
+          type: string
+          format: date-time
+        status:
+          type: string
+
+    ErrorResponse:
+      type: object
+      properties:
+        message:
+          type: string
+
+paths:
+  # ─── Auth ────────────────────────────────────────────────────────────────────
+
+  /api/v1/auth/google:
+    post:
+      summary: Autenticar com Google
+      description: Valida o credential do Google OAuth e retorna um JWT da aplicação.
+      tags: [Auth]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [credential]
+              properties:
+                credential:
+                  type: string
+                  description: ID token do Google OAuth2
+      responses:
+        "200":
+          description: Autenticação bem-sucedida
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                    description: JWT da aplicação
+                  user:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                      email:
+                        type: string
+                      name:
+                        type: string
+                      picture:
+                        type: string
+                        nullable: true
+                      provider:
+                        type: string
+        "400":
+          description: Credential obrigatório
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "401":
+          description: Falha na autenticação com Google
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  # ─── Professionals ────────────────────────────────────────────────────────────
+
+  /api/v1/professionals:
+    get:
+      summary: Listar profissionais
+      tags: [Professionals]
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Lista de profissionais
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  professionals:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          format: uuid
+                        name:
+                          type: string
+
+    post:
+      summary: Criar profissional
+      description: Cria um perfil de profissional vinculado ao usuário autenticado.
+      tags: [Professionals]
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [name]
+              properties:
+                name:
+                  type: string
+                bio:
+                  type: string
+                  nullable: true
+                phone:
+                  $ref: "#/components/schemas/Phone"
+                  nullable: true
+                instagram:
+                  type: string
+                  nullable: true
+                facebook:
+                  type: string
+                  nullable: true
+                photo:
+                  type: string
+                  nullable: true
+                workHours:
+                  type: array
+                  nullable: true
+                  items:
+                    $ref: "#/components/schemas/Interval"
+      responses:
+        "200":
+          description: Profissional criado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    format: uuid
+                  storeId:
+                    type: string
+                    format: uuid
+                    nullable: true
+                  name:
+                    type: string
+                  bio:
+                    type: string
+                    nullable: true
+                  address:
+                    $ref: "#/components/schemas/Address"
+                  phone:
+                    $ref: "#/components/schemas/Phone"
+                  instagram:
+                    type: string
+                    nullable: true
+                  facebook:
+                    type: string
+                    nullable: true
+                  photo:
+                    type: string
+                    nullable: true
+                  workHours:
+                    type: array
+                    nullable: true
+                    items:
+                      $ref: "#/components/schemas/Interval"
+
+  /api/v1/professionals/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+
+    get:
+      summary: Buscar profissional por ID
+      tags: [Professionals]
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Dados do profissional
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    format: uuid
+                  name:
+                    type: string
+                  bio:
+                    type: string
+                    nullable: true
+                  email:
+                    type: string
+                    nullable: true
+                  address:
+                    $ref: "#/components/schemas/Address"
+                  phone:
+                    $ref: "#/components/schemas/Phone"
+                  instagram:
+                    type: string
+                    nullable: true
+                  facebook:
+                    type: string
+                    nullable: true
+                  photo:
+                    type: string
+                    nullable: true
+                  workHours:
+                    type: array
+                    nullable: true
+                    items:
+                      $ref: "#/components/schemas/Interval"
+        "404":
+          description: Profissional não encontrado
+
+  # ─── Services ────────────────────────────────────────────────────────────────
+
+  /api/v1/professionals/{id}/services:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+
+    get:
+      summary: Listar serviços do profissional
+      tags: [Services]
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Lista de serviços
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  services:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          format: uuid
+                        professionalId:
+                          type: string
+                          format: uuid
+                        description:
+                          type: string
+                          nullable: true
+                        price:
+                          type: integer
+                          description: Preço em centavos
+                        durationInMinutes:
+                          type: integer
+
+    post:
+      summary: Criar serviço para o profissional
+      tags: [Services]
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [name, price, durationInMinutes]
+              properties:
+                name:
+                  type: string
+                description:
+                  type: string
+                  nullable: true
+                price:
+                  type: integer
+                  description: Preço em centavos
+                durationInMinutes:
+                  type: integer
+      responses:
+        "200":
+          description: Serviço criado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    format: uuid
+                  name:
+                    type: string
+                  description:
+                    type: string
+                    nullable: true
+                  price:
+                    type: integer
+                  professionalId:
+                    type: string
+                    format: uuid
+
+  # ─── Slots ───────────────────────────────────────────────────────────────────
+
+  /api/v1/professionals/{id}/slots:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+
+    get:
+      summary: Listar slots do profissional
+      description: Retorna os slots do profissional. Requer que o usuário autenticado seja o dono do perfil.
+      tags: [Slots]
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Lista de slots
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Slot"
+        "403":
+          description: Acesso negado (não é o dono do perfil)
+
+    post:
+      summary: Criar slot(s) para o profissional
+      description: Cria um ou mais slots com recorrência semanal. Requer que o usuário autenticado seja o dono do perfil.
+      tags: [Slots]
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [startTime, endTime]
+              properties:
+                serviceId:
+                  type: string
+                  format: uuid
+                  nullable: true
+                startTime:
+                  type: string
+                  format: date-time
+                endTime:
+                  type: string
+                  format: date-time
+                recurrenceWeeks:
+                  type: integer
+                  nullable: true
+                  description: Número de semanas para repetir o slot
+      responses:
+        "200":
+          description: Slots criados
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Slot"
+        "403":
+          description: Acesso negado (não é o dono do perfil)
+
+  /api/v1/professionals/{id}/slots/{slotId}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: slotId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+
+    delete:
+      summary: Deletar slot
+      description: Remove um slot. Requer que o usuário autenticado seja o dono do perfil.
+      tags: [Slots]
+      security:
+        - bearerAuth: []
+      responses:
+        "204":
+          description: Slot deletado com sucesso
+        "403":
+          description: Acesso negado (não é o dono do perfil)
+        "404":
+          description: Slot não encontrado
+
+  /api/v1/professionals/{id}/slots/{slotId}/book:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: slotId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+
+    patch:
+      summary: Reservar slot
+      description: Reserva um slot disponível para um cliente.
+      tags: [Slots]
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [customerName]
+              properties:
+                serviceId:
+                  type: string
+                  format: uuid
+                  nullable: true
+                customerName:
+                  type: string
+                customerPhone:
+                  type: string
+                  nullable: true
+      responses:
+        "200":
+          description: Slot reservado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Slot"
+        "500":
+          description: Slot não está disponível
+
+  /api/v1/professionals/{id}/slots/{slotId}/cancel:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: slotId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+
+    patch:
+      summary: Cancelar reserva de slot
+      description: Cancela uma reserva, tornando o slot disponível novamente.
+      tags: [Slots]
+      security:
+        - bearerAuth: []
+      responses:
+        "204":
+          description: Reserva cancelada com sucesso
+        "500":
+          description: Slot não está reservado
+
+  # ─── Schedules ───────────────────────────────────────────────────────────────
+
+  /api/v1/professionals/{id}/schedules:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+
+    get:
+      summary: Listar agendamentos do profissional
+      description: Requer que o usuário autenticado seja o dono do perfil.
+      tags: [Schedules]
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Lista de agendamentos
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Schedule"
+        "403":
+          description: Acesso negado (não é o dono do perfil)
+
+    post:
+      summary: Criar agendamento
+      description: Cria um agendamento para um cliente. Requer que o usuário autenticado seja o dono do perfil.
+      tags: [Schedules]
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [customerId, startTime, endTime]
+              properties:
+                customerId:
+                  type: string
+                  format: uuid
+                startTime:
+                  type: string
+                  format: date-time
+                endTime:
+                  type: string
+                  format: date-time
+                observation:
+                  type: string
+                  nullable: true
+      responses:
+        "200":
+          description: Agendamento criado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Schedule"
+        "403":
+          description: Acesso negado (não é o dono do perfil)
+
+  # ─── Customers ───────────────────────────────────────────────────────────────
+
+  /api/v1/customers:
+    post:
+      summary: Criar cliente
+      tags: [Customers]
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [name, countryCode, areaCode, phoneNumber]
+              properties:
+                name:
+                  type: string
+                countryCode:
+                  type: string
+                  example: "55"
+                areaCode:
+                  type: string
+                  example: "11"
+                phoneNumber:
+                  type: string
+                  example: "987654321"
+                isWhatsApp:
+                  type: boolean
+                  default: false
+                email:
+                  type: string
+                  format: email
+                  nullable: true
+      responses:
+        "200":
+          description: Cliente criado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    format: uuid
+                  name:
+                    type: string
+                  phone:
+                    $ref: "#/components/schemas/Phone"
+                  email:
+                    type: string
+                    nullable: true
+
+  # ─── WhatsApp ─────────────────────────────────────────────────────────────────
+
+  /api/v1/whatsapp:
+    get:
+      summary: Verificação do webhook WhatsApp
+      description: Endpoint de verificação do webhook da Meta. Responde ao challenge quando o token é válido.
+      tags: [WhatsApp]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: hub.mode
+          in: query
+          schema:
+            type: string
+        - name: hub.verify_token
+          in: query
+          schema:
+            type: string
+        - name: hub.challenge
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Token verificado, retorna o challenge
+        "403":
+          description: Token inválido
+
+    post:
+      summary: Receber eventos do WhatsApp
+      description: Recebe e registra eventos enviados pela Meta (mensagens, status de entrega, etc.).
+      tags: [WhatsApp]
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              description: Payload de evento da Meta (estrutura varia conforme o tipo de evento)
+      responses:
+        "200":
+          description: Evento recebido com sucesso
