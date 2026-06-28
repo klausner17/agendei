@@ -14,6 +14,7 @@ import com.klausner.repositories.user.IUserRepository
 import com.klausner.repositories.user.UserRepository
 import com.klausner.services.JwtService
 import com.klausner.services.PasswordHasher
+import com.klausner.usecases.auth.RegisterUserUseCase
 import com.klausner.usecases.customer.CreateCustomerUseCase
 import com.klausner.usecases.professional.CreateProfessionalUseCase
 import com.klausner.usecases.professional.DeleteProfessionalUseCase
@@ -57,6 +58,7 @@ val mainModule =
         single { ScheduleRepository(get()) } bind IScheduleRepository::class
 
         // use cases
+        single { RegisterUserUseCase(get(), get(), get()) }
         single { CreateCustomerUseCase(get()) }
         single { CreateScheduleUseCase(get(), get(), get()) }
         single { GetSchedulesByProfessionalUseCase(get(), get()) }
