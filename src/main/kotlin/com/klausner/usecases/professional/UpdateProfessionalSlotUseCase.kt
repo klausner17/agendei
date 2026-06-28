@@ -23,7 +23,7 @@ class UpdateProfessionalSlotUseCase(
         professional: Professional,
         slots: List<Interval>,
     ) = professional.copy(
-        slots = professional.slots,
+        slots = slots,
     )
 
     data class Input(

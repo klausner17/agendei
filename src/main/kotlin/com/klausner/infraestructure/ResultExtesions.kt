@@ -30,15 +30,25 @@ suspend inline fun RoutingContext.foldAndRespond(result: Result<Any>) {
                 call.respond(it)
             }
         },
-        onFailure = {
+        onFailure = { exception ->
+            val status = statusFor(exception)
             call.respond(
+                status,
                 ErrorResponse(
-                    message = "Internal server error",
-                    status = 500,
+                    message = status.description,
+                    status = status.value,
                     timestamp = System.currentTimeMillis(),
-                    debugMessage = it.message ?: "Internal server error",
+                    debugMessage = exception.message,
                 ),
             )
         },
     )
 }
+
+fun statusFor(exception: Throwable): HttpStatusCode =
+    when (exception) {
+        is NoSuchElementException -> HttpStatusCode.NotFound
+        is IllegalArgumentException -> HttpStatusCode.BadRequest
+        is IllegalStateException -> HttpStatusCode.UnprocessableEntity
+        else -> HttpStatusCode.InternalServerError
+    }

@@ -8,7 +8,9 @@ import io.mockk.mockk
 import io.mockk.verify
 import java.time.LocalDateTime
 import java.util.UUID
+import io.mockk.slot as captureSlot
 import kotlin.test.Test
+import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 class UpdateProfessionalSlotUseCaseTest {
@@ -17,20 +19,20 @@ class UpdateProfessionalSlotUseCaseTest {
 
     private val professionalId = UUID.randomUUID()
     private val professional = Professional(id = professionalId, name = "Ana Lima")
-    private val slot = Interval(startTime = LocalDateTime.of(2026, 7, 1, 9, 0), endTime = LocalDateTime.of(2026, 7, 1, 10, 0))
+    private val newSlot = Interval(startTime = LocalDateTime.of(2026, 7, 1, 9, 0), endTime = LocalDateTime.of(2026, 7, 1, 10, 0))
 
     @Test
-    fun `deve atualizar slots do profissional com sucesso`() {
+    fun `deve substituir slots do profissional pelos slots informados`() {
+        val captured = captureSlot<Professional>()
         every { repository.find(professionalId) } returns Result.success(professional)
-        every { repository.update(any()) } returns Result.success(professional)
+        every { repository.update(capture(captured)) } returns Result.success(professional)
 
         val result = useCase.execute(
-            UpdateProfessionalSlotUseCase.Input(professionalId = professionalId, slot = listOf(slot)),
+            UpdateProfessionalSlotUseCase.Input(professionalId = professionalId, slot = listOf(newSlot)),
         )
 
         assertTrue(result.isSuccess)
-        verify(exactly = 1) { repository.find(professionalId) }
-        verify(exactly = 1) { repository.update(any()) }
+        assertEquals(listOf(newSlot), captured.captured.slots)
     }
 
     @Test
@@ -38,7 +40,7 @@ class UpdateProfessionalSlotUseCaseTest {
         every { repository.find(professionalId) } returns Result.failure(NoSuchElementException("not found"))
 
         val result = useCase.execute(
-            UpdateProfessionalSlotUseCase.Input(professionalId = professionalId, slot = listOf(slot)),
+            UpdateProfessionalSlotUseCase.Input(professionalId = professionalId, slot = listOf(newSlot)),
         )
 
         assertTrue(result.isFailure)
