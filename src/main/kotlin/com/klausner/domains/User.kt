@@ -9,6 +9,5 @@ data class User(
     val picture: String? = null,
     val provider: String = "google",
     val googleId: String,
-    val emailVerified: Boolean = false
+    val emailVerified: Boolean = false,
 ) : Domain
-

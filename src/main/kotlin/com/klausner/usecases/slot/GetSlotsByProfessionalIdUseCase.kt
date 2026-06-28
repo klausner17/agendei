@@ -11,7 +11,6 @@ import java.util.UUID
 class GetSlotsByProfessionalIdUseCase(
     private val repository: ISlotRepository,
 ) : UseCase<Input, List<Output>> {
-
     override fun execute(input: Input): Result<List<Output>> =
         repository
             .findByProfessionalId(input.professionalId)

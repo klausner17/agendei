@@ -4,7 +4,6 @@ import com.klausner.routes.ErrorResponse
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.response.respond
 import io.ktor.server.routing.RoutingContext
-import org.apache.http.HttpStatus
 
 fun <T> T.success(): Result<T> = Result.success(this)
 

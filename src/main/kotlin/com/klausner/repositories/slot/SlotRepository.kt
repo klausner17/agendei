@@ -14,7 +14,6 @@ import java.util.UUID
 class SlotRepository(
     private val database: Database,
 ) : ISlotRepository {
-
     override fun create(obj: Slot): Result<Slot> =
         runCatching {
             transaction(database) {

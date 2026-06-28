@@ -5,6 +5,6 @@ import com.klausner.repositories.interfaces.BasicCrud
 
 interface IUserRepository : BasicCrud<User> {
     fun findByEmail(email: String): Result<User?>
+
     fun findByGoogleId(googleId: String): Result<User?>
 }
-

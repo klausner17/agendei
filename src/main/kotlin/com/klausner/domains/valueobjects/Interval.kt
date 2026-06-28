@@ -9,5 +9,5 @@ data class Interval(
     val startTime: LocalDateTime,
     val endTime: LocalDateTime,
     val daysOfWeek: List<DayOfWeek>? = null,
-    val service: Service? = null
+    val service: Service? = null,
 ) : ValueObject

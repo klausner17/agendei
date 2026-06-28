@@ -4,7 +4,6 @@ import com.klausner.database.columns.Slot
 import com.klausner.database.tables.ProfessionalTable
 import com.klausner.domains.Professional
 import com.klausner.infraestructure.objectMapper
-import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.deleteWhere

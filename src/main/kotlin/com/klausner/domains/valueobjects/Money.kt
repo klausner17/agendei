@@ -10,10 +10,13 @@ abstract class Money(
     val currency: Currency,
     val type: MoneyType,
 ) : ValueObject {
-
     companion object {
-
-        fun fromType(type: MoneyType, amount: Int, min: Int = 0, max: Int = 0): Money {
+        fun fromType(
+            type: MoneyType,
+            amount: Int,
+            min: Int = 0,
+            max: Int = 0,
+        ): Money {
             return when (type) {
                 MoneyType.FIXED -> MoneyFixed(amount)
                 MoneyType.RANGED -> MoneyRanged(min, max)
@@ -24,16 +27,16 @@ abstract class Money(
 
 data class MoneyRanged(val min: Int, val max: Int) :
     Money(currency = Currency.BRL, type = MoneyType.RANGED) {
-
-    override fun toString(): String = with(currency) {
-        return "$symbol ${min / divisor} - $symbol ${max / divisor}"
-    }
+    override fun toString(): String =
+        with(currency) {
+            return "$symbol ${min / divisor} - $symbol ${max / divisor}"
+        }
 }
 
 data class MoneyFixed(val amount: Int) :
     Money(currency = Currency.BRL, type = MoneyType.FIXED) {
-
-    override fun toString(): String = with(currency) {
-        return "$symbol ${amount / divisor}"
-    }
+    override fun toString(): String =
+        with(currency) {
+            return "$symbol ${amount / divisor}"
+        }
 }

@@ -15,5 +15,5 @@ data class Establishment(
     val facebook: String?,
     val whatsapp: String?,
     val logo: String,
-    val businessHours: List<Interval>
+    val businessHours: List<Interval>,
 ) : Domain

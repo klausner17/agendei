@@ -12,7 +12,6 @@ import java.util.UUID
 class BookSlotUseCase(
     private val repository: ISlotRepository,
 ) : UseCase<Input, Output> {
-
     override fun execute(input: Input): Result<Output> =
         repository
             .find(input.slotId)

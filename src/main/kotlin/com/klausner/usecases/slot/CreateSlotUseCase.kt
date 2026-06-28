@@ -11,17 +11,17 @@ import java.util.UUID
 class CreateSlotUseCase(
     private val repository: ISlotRepository,
 ) : UseCase<Input, List<Output>> {
-
     override fun execute(input: Input): Result<List<Output>> {
         val weeks = input.recurrenceWeeks ?: 1
-        val slots = (0 until weeks).map { week ->
-            Slot(
-                professionalId = input.professionalId,
-                serviceId = input.serviceId,
-                startTime = input.startTime.plusWeeks(week.toLong()),
-                endTime = input.endTime.plusWeeks(week.toLong()),
-            )
-        }
+        val slots =
+            (0 until weeks).map { week ->
+                Slot(
+                    professionalId = input.professionalId,
+                    serviceId = input.serviceId,
+                    startTime = input.startTime.plusWeeks(week.toLong()),
+                    endTime = input.endTime.plusWeeks(week.toLong()),
+                )
+            }
 
         return if (slots.size == 1) {
             repository.create(slots.first()).map { listOf(domainToOutput(it)) }

@@ -8,9 +8,10 @@ import com.fasterxml.jackson.module.kotlin.KotlinModule
 
 val objectMapper = defaultMapper()
 
-private fun defaultMapper() = JsonMapper.builder()
-    .addModule(JavaTimeModule())
-    .configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false)
-    .addModule(KotlinModule.Builder().build())
-    .propertyNamingStrategy(PropertyNamingStrategies.LowerCamelCaseStrategy())
-    .build()!!
+private fun defaultMapper() =
+    JsonMapper.builder()
+        .addModule(JavaTimeModule())
+        .configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false)
+        .addModule(KotlinModule.Builder().build())
+        .propertyNamingStrategy(PropertyNamingStrategies.LowerCamelCaseStrategy())
+        .build()!!
