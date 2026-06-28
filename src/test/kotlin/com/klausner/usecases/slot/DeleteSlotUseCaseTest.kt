@@ -1,35 +1,76 @@
 package com.klausner.usecases.slot
 
+import com.klausner.domains.Professional
+import com.klausner.domains.Slot
+import com.klausner.repositories.professional.IProfessionalRepository
 import com.klausner.repositories.slot.ISlotRepository
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import java.time.LocalDateTime
 import java.util.UUID
 import kotlin.test.Test
 import kotlin.test.assertTrue
 
 class DeleteSlotUseCaseTest {
-    private val repository = mockk<ISlotRepository>()
-    private val useCase = DeleteSlotUseCase(repository)
+    private val slotRepository = mockk<ISlotRepository>()
+    private val professionalRepository = mockk<IProfessionalRepository>()
+    private val useCase = DeleteSlotUseCase(slotRepository, professionalRepository)
+
+    private val userId = UUID.randomUUID()
+    private val professionalId = UUID.randomUUID()
+    private val slotId = UUID.randomUUID()
+    private val professional = Professional(id = professionalId, userId = userId, name = "Dr. Ana")
+
+    private val slot =
+        Slot(
+            id = slotId,
+            professionalId = professionalId,
+            startTime = LocalDateTime.of(2026, 7, 1, 9, 0),
+            endTime = LocalDateTime.of(2026, 7, 1, 10, 0),
+        )
 
     @Test
     fun `deve deletar slot com sucesso`() {
-        val id = UUID.randomUUID()
-        every { repository.delete(id) } returns Result.success(Unit)
+        // given
+        every { slotRepository.find(slotId) } returns Result.success(slot)
+        every { professionalRepository.find(professionalId) } returns Result.success(professional)
+        every { slotRepository.delete(slotId) } returns Result.success(Unit)
 
-        val result = useCase.execute(DeleteSlotUseCase.Input(slotId = id))
+        // when
+        val result = useCase.execute(DeleteSlotUseCase.Input(slotId = slotId, requesterId = userId))
 
+        // then
         assertTrue(result.isSuccess)
-        verify(exactly = 1) { repository.delete(id) }
+        verify(exactly = 1) { slotRepository.delete(slotId) }
     }
 
     @Test
-    fun `deve retornar falha quando repositorio falha`() {
-        val id = UUID.randomUUID()
-        every { repository.delete(id) } returns Result.failure(RuntimeException("not found"))
+    fun `deve retornar falha quando slot nao encontrado`() {
+        // given
+        every { slotRepository.find(slotId) } returns Result.failure(NoSuchElementException("Slot not found"))
 
-        val result = useCase.execute(DeleteSlotUseCase.Input(slotId = id))
+        // when
+        val result = useCase.execute(DeleteSlotUseCase.Input(slotId = slotId, requesterId = userId))
 
+        // then
         assertTrue(result.isFailure)
+        verify(exactly = 0) { slotRepository.delete(any()) }
+    }
+
+    @Test
+    fun `deve retornar 403 quando usuario nao e dono do slot`() {
+        // given
+        val outroUserId = UUID.randomUUID()
+        every { slotRepository.find(slotId) } returns Result.success(slot)
+        every { professionalRepository.find(professionalId) } returns Result.success(professional)
+
+        // when
+        val result = useCase.execute(DeleteSlotUseCase.Input(slotId = slotId, requesterId = outroUserId))
+
+        // then
+        assertTrue(result.isFailure)
+        assertTrue(result.exceptionOrNull() is SecurityException)
+        verify(exactly = 0) { slotRepository.delete(any()) }
     }
 }

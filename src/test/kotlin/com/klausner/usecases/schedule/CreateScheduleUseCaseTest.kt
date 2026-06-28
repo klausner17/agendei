@@ -23,6 +23,7 @@ class CreateScheduleUseCaseTest {
     private val professionalRepository = mockk<IProfessionalRepository>()
     private val useCase = CreateScheduleUseCase(scheduleRepository, customerRepository, professionalRepository)
 
+    private val userId = UUID.randomUUID()
     private val professionalId = UUID.randomUUID()
     private val customerId = UUID.randomUUID()
     private val startTime = LocalDateTime.of(2026, 7, 1, 9, 0)
@@ -38,9 +39,19 @@ class CreateScheduleUseCaseTest {
     private val professional =
         Professional(
             id = professionalId,
+            userId = userId,
             name = "Dr. Ana",
-            phone = Phone(countryCode = "55", areaCode = "11", number = "988887777", isWhatsApp = true),
             slots = emptyList(),
+        )
+
+    private fun input(observation: String? = null) =
+        CreateScheduleUseCase.Input(
+            professionalId = professionalId,
+            requesterId = userId,
+            customerId = customerId,
+            startTime = startTime,
+            endTime = endTime,
+            observation = observation,
         )
 
     @Test
@@ -54,20 +65,12 @@ class CreateScheduleUseCaseTest {
                 observation = "primeira consulta",
                 interval = Interval(startTime = startTime, endTime = endTime),
             )
-        every { customerRepository.find(customerId) } returns Result.success(customer)
         every { professionalRepository.find(professionalId) } returns Result.success(professional)
+        every { customerRepository.find(customerId) } returns Result.success(customer)
         every { scheduleRepository.create(any()) } returns Result.success(schedule)
 
         // when
-        val input =
-            CreateScheduleUseCase.Input(
-                professionalId = professionalId,
-                customerId = customerId,
-                startTime = startTime,
-                endTime = endTime,
-                observation = "primeira consulta",
-            )
-        val result = useCase.execute(input)
+        val result = useCase.execute(input(observation = "primeira consulta"))
 
         // then
         assertTrue(result.isSuccess)
@@ -82,18 +85,12 @@ class CreateScheduleUseCaseTest {
     @Test
     fun `deve retornar falha quando cliente nao existe`() {
         // given
+        every { professionalRepository.find(professionalId) } returns Result.success(professional)
         every { customerRepository.find(customerId) } returns
             Result.failure(NoSuchElementException("Customer not found"))
 
         // when
-        val input =
-            CreateScheduleUseCase.Input(
-                professionalId = professionalId,
-                customerId = customerId,
-                startTime = startTime,
-                endTime = endTime,
-            )
-        val result = useCase.execute(input)
+        val result = useCase.execute(input())
 
         // then
         assertTrue(result.isFailure)
@@ -103,23 +100,38 @@ class CreateScheduleUseCaseTest {
     @Test
     fun `deve retornar falha quando profissional nao existe`() {
         // given
-        every { customerRepository.find(customerId) } returns Result.success(customer)
-        every {
-            professionalRepository.find(professionalId)
-        } returns Result.failure(NoSuchElementException("Professional not found"))
+        every { professionalRepository.find(professionalId) } returns
+            Result.failure(NoSuchElementException("Professional not found"))
 
         // when
-        val input =
-            CreateScheduleUseCase.Input(
-                professionalId = professionalId,
-                customerId = customerId,
-                startTime = startTime,
-                endTime = endTime,
-            )
-        val result = useCase.execute(input)
+        val result = useCase.execute(input())
 
         // then
         assertTrue(result.isFailure)
+        verify(exactly = 0) { scheduleRepository.create(any()) }
+    }
+
+    @Test
+    fun `deve retornar 403 quando usuario nao e dono do profissional`() {
+        // given
+        val outroUserId = UUID.randomUUID()
+        every { professionalRepository.find(professionalId) } returns Result.success(professional)
+
+        // when
+        val result =
+            useCase.execute(
+                CreateScheduleUseCase.Input(
+                    professionalId = professionalId,
+                    requesterId = outroUserId,
+                    customerId = customerId,
+                    startTime = startTime,
+                    endTime = endTime,
+                ),
+            )
+
+        // then
+        assertTrue(result.isFailure)
+        assertTrue(result.exceptionOrNull() is SecurityException)
         verify(exactly = 0) { scheduleRepository.create(any()) }
     }
 
@@ -134,19 +146,12 @@ class CreateScheduleUseCaseTest {
                 observation = "",
                 interval = Interval(startTime = startTime, endTime = endTime),
             )
-        every { customerRepository.find(customerId) } returns Result.success(customer)
         every { professionalRepository.find(professionalId) } returns Result.success(professional)
+        every { customerRepository.find(customerId) } returns Result.success(customer)
         every { scheduleRepository.create(any()) } returns Result.success(schedule)
 
         // when
-        val input =
-            CreateScheduleUseCase.Input(
-                professionalId = professionalId,
-                customerId = customerId,
-                startTime = startTime,
-                endTime = endTime,
-            )
-        val result = useCase.execute(input)
+        val result = useCase.execute(input())
 
         // then
         assertTrue(result.isSuccess)
