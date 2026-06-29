@@ -3,6 +3,7 @@ package com.klausner.routes
 import com.klausner.infraestructure.foldAndRespond
 import com.klausner.usecases.professional.CreateProfessionalUseCase
 import com.klausner.usecases.professional.GetAllProfessionalsUseCase
+import com.klausner.usecases.professional.GetMyProfessionalUseCase
 import com.klausner.usecases.professional.GetProfessionalUseCase
 import com.klausner.usecases.service.CreateServiceUseCase
 import com.klausner.usecases.service.GetServicesByProfessionalIdUseCase
@@ -24,6 +25,7 @@ import java.util.UUID
 fun Route.professionalRoutes() {
     val createProfessionalUseCase: CreateProfessionalUseCase by getKoin().inject()
     val getProfessionalUseCase: GetProfessionalUseCase by getKoin().inject()
+    val getMyProfessionalUseCase: GetMyProfessionalUseCase by getKoin().inject()
     val getAllProfessionalsUseCase: GetAllProfessionalsUseCase by getKoin().inject()
     val getMyServicesUseCase: GetServicesByProfessionalIdUseCase by getKoin().inject()
     val createServiceUseCase: CreateServiceUseCase by getKoin().inject()
@@ -40,6 +42,10 @@ fun Route.professionalRoutes() {
         post {
             val input = call.receive<CreateProfessionalUseCase.Input>().copy(userId = principalUserId())
             foldAndRespond(createProfessionalUseCase.execute(input))
+        }
+        get("/me") {
+            val input = GetMyProfessionalUseCase.Input(userId = principalUserId())
+            foldAndRespond(getMyProfessionalUseCase.execute(input))
         }
         route("/{id}") {
             get {

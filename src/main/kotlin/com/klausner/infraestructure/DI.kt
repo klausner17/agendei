@@ -20,6 +20,7 @@ import com.klausner.usecases.customer.CreateCustomerUseCase
 import com.klausner.usecases.professional.CreateProfessionalUseCase
 import com.klausner.usecases.professional.DeleteProfessionalUseCase
 import com.klausner.usecases.professional.GetAllProfessionalsUseCase
+import com.klausner.usecases.professional.GetMyProfessionalUseCase
 import com.klausner.usecases.professional.GetProfessionalUseCase
 import com.klausner.usecases.professional.UpdateProfessionalSlotUseCase
 import com.klausner.usecases.professional.UpdateProfessionalUseCase
@@ -66,6 +67,7 @@ val mainModule =
         single { GetSchedulesByProfessionalUseCase(get(), get()) }
         single { CreateProfessionalUseCase(get()) }
         single { GetProfessionalUseCase(get()) }
+        single { GetMyProfessionalUseCase(get()) }
         single { GetAllProfessionalsUseCase(get()) }
         single { UpdateProfessionalUseCase(get()) }
         single { DeleteProfessionalUseCase(get()) }
