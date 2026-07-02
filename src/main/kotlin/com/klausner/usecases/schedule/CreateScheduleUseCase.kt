@@ -27,7 +27,7 @@ class CreateScheduleUseCase(
         professional: Professional,
         requesterId: UUID,
     ): Result<Professional> =
-        if (professional.userId == requesterId) {
+        if (professional.id == requesterId) {
             Result.success(professional)
         } else {
             Result.failure(SecurityException("Access denied"))

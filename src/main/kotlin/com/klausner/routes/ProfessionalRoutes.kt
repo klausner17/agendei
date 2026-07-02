@@ -1,51 +1,31 @@
 package com.klausner.routes
 
 import com.klausner.infraestructure.foldAndRespond
-import com.klausner.usecases.professional.CreateProfessionalUseCase
 import com.klausner.usecases.professional.GetAllProfessionalsUseCase
-import com.klausner.usecases.professional.GetMyProfessionalUseCase
 import com.klausner.usecases.professional.GetProfessionalUseCase
 import com.klausner.usecases.service.CreateServiceUseCase
 import com.klausner.usecases.service.GetServicesByProfessionalIdUseCase
-import com.klausner.usecases.slot.BookSlotUseCase
-import com.klausner.usecases.slot.CancelBookingUseCase
-import com.klausner.usecases.slot.CreateSlotUseCase
-import com.klausner.usecases.slot.DeleteSlotUseCase
-import com.klausner.usecases.slot.GetSlotsByProfessionalIdUseCase
 import io.ktor.server.request.receive
 import io.ktor.server.routing.Route
-import io.ktor.server.routing.delete
 import io.ktor.server.routing.get
-import io.ktor.server.routing.patch
 import io.ktor.server.routing.post
 import io.ktor.server.routing.route
 import org.koin.java.KoinJavaComponent.getKoin
 import java.util.UUID
 
 fun Route.professionalRoutes() {
-    val createProfessionalUseCase: CreateProfessionalUseCase by getKoin().inject()
     val getProfessionalUseCase: GetProfessionalUseCase by getKoin().inject()
-    val getMyProfessionalUseCase: GetMyProfessionalUseCase by getKoin().inject()
     val getAllProfessionalsUseCase: GetAllProfessionalsUseCase by getKoin().inject()
     val getMyServicesUseCase: GetServicesByProfessionalIdUseCase by getKoin().inject()
     val createServiceUseCase: CreateServiceUseCase by getKoin().inject()
-    val createSlotUseCase: CreateSlotUseCase by getKoin().inject()
-    val getSlotsByProfessionalIdUseCase: GetSlotsByProfessionalIdUseCase by getKoin().inject()
-    val deleteSlotUseCase: DeleteSlotUseCase by getKoin().inject()
-    val bookSlotUseCase: BookSlotUseCase by getKoin().inject()
-    val cancelBookingUseCase: CancelBookingUseCase by getKoin().inject()
 
     route("/professionals") {
         get {
             foldAndRespond(getAllProfessionalsUseCase.execute())
         }
-        post {
-            val input = call.receive<CreateProfessionalUseCase.Input>().copy(userId = principalUserId())
-            foldAndRespond(createProfessionalUseCase.execute(input))
-        }
         get("/me") {
-            val input = GetMyProfessionalUseCase.Input(userId = principalUserId())
-            foldAndRespond(getMyProfessionalUseCase.execute(input))
+            val input = GetProfessionalUseCase.Input(professionalId = principalUserId())
+            foldAndRespond(getProfessionalUseCase.execute(input))
         }
         route("/{id}") {
             get {
@@ -71,58 +51,6 @@ fun Route.professionalRoutes() {
                     foldAndRespond(createServiceUseCase.execute(input))
                 }
             }
-            route("/slots") {
-                get {
-                    val id = UUID.fromString(call.parameters["id"]!!)
-                    val input =
-                        GetSlotsByProfessionalIdUseCase.Input(
-                            professionalId = id,
-                            requesterId = principalUserId(),
-                        )
-                    foldAndRespond(getSlotsByProfessionalIdUseCase.execute(input))
-                }
-                post {
-                    val id = UUID.fromString(call.parameters["id"]!!)
-                    val request = call.receive<CreateSlotRequest>()
-                    val input =
-                        CreateSlotUseCase.Input(
-                            professionalId = id,
-                            requesterId = principalUserId(),
-                            serviceId = request.serviceId,
-                            startTime = request.startTime,
-                            endTime = request.endTime,
-                            recurrenceWeeks = request.recurrenceWeeks,
-                        )
-                    foldAndRespond(createSlotUseCase.execute(input))
-                }
-                route("/{slotId}") {
-                    delete {
-                        val slotId = UUID.fromString(call.parameters["slotId"]!!)
-                        val input =
-                            DeleteSlotUseCase.Input(
-                                slotId = slotId,
-                                requesterId = principalUserId(),
-                            )
-                        foldAndRespond(deleteSlotUseCase.execute(input))
-                    }
-                    patch("/book") {
-                        val slotId = UUID.fromString(call.parameters["slotId"]!!)
-                        val request = call.receive<BookSlotRequest>()
-                        val input =
-                            BookSlotUseCase.Input(
-                                slotId = slotId,
-                                serviceId = request.serviceId,
-                                customerName = request.customerName,
-                                customerPhone = request.customerPhone,
-                            )
-                        foldAndRespond(bookSlotUseCase.execute(input))
-                    }
-                    patch("/cancel") {
-                        val slotId = UUID.fromString(call.parameters["slotId"]!!)
-                        foldAndRespond(cancelBookingUseCase.execute(CancelBookingUseCase.Input(slotId)))
-                    }
-                }
-            }
         }
     }
 }
@@ -132,17 +60,4 @@ data class CreateServiceRequest(
     val description: String?,
     val price: Int,
     val durationInMinutes: Int,
-)
-
-data class CreateSlotRequest(
-    val serviceId: UUID? = null,
-    val startTime: java.time.LocalDateTime,
-    val endTime: java.time.LocalDateTime,
-    val recurrenceWeeks: Int? = null,
-)
-
-data class BookSlotRequest(
-    val serviceId: UUID? = null,
-    val customerName: String,
-    val customerPhone: String? = null,
 )

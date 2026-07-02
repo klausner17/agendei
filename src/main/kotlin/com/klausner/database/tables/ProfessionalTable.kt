@@ -11,12 +11,11 @@ import java.util.UUID
 
 object ProfessionalTable : Table("professionals") {
     val id = varchar(name = "id", length = 36)
-    val userId = uuid(name = "user_id").nullable()
     val storeId = uuid(name = "store_id").nullable()
     val professionalName = varchar(name = "name", length = 100)
     val bio = text(name = "bio").nullable()
     val email = varchar(name = "email", length = 100).nullable()
-    val password = varchar(name = "password", length = 100).nullable()
+    val password = varchar(name = "password", length = 255).nullable()
     val houseNumber = varchar(name = "house_number", length = 20).nullable()
     val complement = varchar(name = "complement", length = 100).nullable()
     val street = varchar(name = "street", length = 100).nullable()
@@ -36,7 +35,6 @@ object ProfessionalTable : Table("professionals") {
     fun toDomain(row: ResultRow): Professional =
         Professional(
             id = UUID.fromString(row[id]),
-            userId = row[userId],
             storeId = row[storeId],
             name = row[professionalName],
             bio = row[bio],

@@ -2,7 +2,7 @@ package com.klausner.services
 
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
-import com.klausner.domains.User
+import com.klausner.domains.Professional
 import java.util.Date
 
 class JwtService(
@@ -10,12 +10,12 @@ class JwtService(
 ) {
     private val algorithm = Algorithm.HMAC256(secret)
 
-    fun generateToken(user: User): String =
+    fun generateToken(professional: Professional): String =
         JWT
             .create()
-            .withSubject(user.id.toString())
-            .withClaim("email", user.email)
-            .withClaim("name", user.name)
+            .withSubject(professional.id.toString())
+            .withClaim("email", professional.email)
+            .withClaim("name", professional.name)
             .withExpiresAt(Date(System.currentTimeMillis() + 7 * 24 * 60 * 60 * 1000)) // 7 dias
             .sign(algorithm)
 

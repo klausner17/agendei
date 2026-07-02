@@ -19,9 +19,8 @@ class GetSchedulesByProfessionalUseCaseTest {
     private val professionalRepository = mockk<IProfessionalRepository>()
     private val useCase = GetSchedulesByProfessionalUseCase(scheduleRepository, professionalRepository)
 
-    private val userId = UUID.randomUUID()
     private val professionalId = UUID.randomUUID()
-    private val professional = Professional(id = professionalId, userId = userId, name = "Dr. Ana")
+    private val professional = Professional(id = professionalId, name = "Dr. Ana")
 
     private fun schedule() =
         Schedule(
@@ -39,7 +38,7 @@ class GetSchedulesByProfessionalUseCaseTest {
     private fun input() =
         GetSchedulesByProfessionalUseCase.Input(
             professionalId = professionalId,
-            requesterId = userId,
+            requesterId = professionalId,
         )
 
     @Test

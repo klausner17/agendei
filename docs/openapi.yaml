@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
   title: Agendei API
-  description: API de agendamento por slots para profissionais
+  description: API de agendamento para profissionais
   version: 1.0.0
 
 servers:
@@ -74,35 +74,6 @@ components:
             type: string
             enum: [MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY]
 
-    Slot:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        professionalId:
-          type: string
-          format: uuid
-        serviceId:
-          type: string
-          format: uuid
-          nullable: true
-        startTime:
-          type: string
-          format: date-time
-        endTime:
-          type: string
-          format: date-time
-        status:
-          type: string
-          enum: [AVAILABLE, BOOKED]
-        customerName:
-          type: string
-          nullable: true
-        customerPhone:
-          type: string
-          nullable: true
-
     Schedule:
       type: object
       properties:
@@ -153,8 +124,8 @@ paths:
 
   /api/v1/auth/register:
     post:
-      summary: Registrar usuário
-      description: Cria um usuário com email/senha e retorna um JWT da aplicação.
+      summary: Registrar profissional
+      description: Cria um profissional com email/senha e retorna um JWT da aplicação.
       tags: [Auth]
       requestBody:
         required: true
@@ -255,85 +226,10 @@ paths:
                         name:
                           type: string
 
-    post:
-      summary: Criar profissional
-      description: Cria um perfil de profissional vinculado ao usuário autenticado.
-      tags: [Professionals]
-      security:
-        - bearerAuth: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              required: [name]
-              properties:
-                name:
-                  type: string
-                bio:
-                  type: string
-                  nullable: true
-                phone:
-                  $ref: "#/components/schemas/Phone"
-                  nullable: true
-                instagram:
-                  type: string
-                  nullable: true
-                facebook:
-                  type: string
-                  nullable: true
-                photo:
-                  type: string
-                  nullable: true
-                workHours:
-                  type: array
-                  nullable: true
-                  items:
-                    $ref: "#/components/schemas/Interval"
-      responses:
-        "200":
-          description: Profissional criado
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  id:
-                    type: string
-                    format: uuid
-                  storeId:
-                    type: string
-                    format: uuid
-                    nullable: true
-                  name:
-                    type: string
-                  bio:
-                    type: string
-                    nullable: true
-                  address:
-                    $ref: "#/components/schemas/Address"
-                  phone:
-                    $ref: "#/components/schemas/Phone"
-                  instagram:
-                    type: string
-                    nullable: true
-                  facebook:
-                    type: string
-                    nullable: true
-                  photo:
-                    type: string
-                    nullable: true
-                  workHours:
-                    type: array
-                    nullable: true
-                    items:
-                      $ref: "#/components/schemas/Interval"
-
   /api/v1/professionals/me:
     get:
-      summary: Buscar o profissional do usuário autenticado
-      description: Retorna o perfil de profissional vinculado ao usuário autenticado (via JWT).
+      summary: Buscar o profissional autenticado
+      description: Retorna o perfil do profissional autenticado (identificado pelo JWT).
       tags: [Professionals]
       security:
         - bearerAuth: []
@@ -374,8 +270,6 @@ paths:
                     nullable: true
                     items:
                       $ref: "#/components/schemas/Interval"
-        "422":
-          description: O usuário autenticado ainda não possui um profissional
 
   /api/v1/professionals/{id}:
     parameters:
@@ -519,179 +413,6 @@ paths:
                   professionalId:
                     type: string
                     format: uuid
-
-  # ─── Slots ───────────────────────────────────────────────────────────────────
-
-  /api/v1/professionals/{id}/slots:
-    parameters:
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: string
-          format: uuid
-
-    get:
-      summary: Listar slots do profissional
-      description: Retorna os slots do profissional. Requer que o usuário autenticado seja o dono do perfil.
-      tags: [Slots]
-      security:
-        - bearerAuth: []
-      responses:
-        "200":
-          description: Lista de slots
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/Slot"
-        "403":
-          description: Acesso negado (não é o dono do perfil)
-
-    post:
-      summary: Criar slot(s) para o profissional
-      description: Cria um ou mais slots com recorrência semanal. Requer que o usuário autenticado seja o dono do perfil.
-      tags: [Slots]
-      security:
-        - bearerAuth: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              required: [startTime, endTime]
-              properties:
-                serviceId:
-                  type: string
-                  format: uuid
-                  nullable: true
-                startTime:
-                  type: string
-                  format: date-time
-                endTime:
-                  type: string
-                  format: date-time
-                recurrenceWeeks:
-                  type: integer
-                  nullable: true
-                  description: Número de semanas para repetir o slot
-      responses:
-        "200":
-          description: Slots criados
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/Slot"
-        "403":
-          description: Acesso negado (não é o dono do perfil)
-
-  /api/v1/professionals/{id}/slots/{slotId}:
-    parameters:
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: string
-          format: uuid
-      - name: slotId
-        in: path
-        required: true
-        schema:
-          type: string
-          format: uuid
-
-    delete:
-      summary: Deletar slot
-      description: Remove um slot. Requer que o usuário autenticado seja o dono do perfil.
-      tags: [Slots]
-      security:
-        - bearerAuth: []
-      responses:
-        "204":
-          description: Slot deletado com sucesso
-        "403":
-          description: Acesso negado (não é o dono do perfil)
-        "404":
-          description: Slot não encontrado
-
-  /api/v1/professionals/{id}/slots/{slotId}/book:
-    parameters:
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: string
-          format: uuid
-      - name: slotId
-        in: path
-        required: true
-        schema:
-          type: string
-          format: uuid
-
-    patch:
-      summary: Reservar slot
-      description: Reserva um slot disponível para um cliente.
-      tags: [Slots]
-      security:
-        - bearerAuth: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              required: [customerName]
-              properties:
-                serviceId:
-                  type: string
-                  format: uuid
-                  nullable: true
-                customerName:
-                  type: string
-                customerPhone:
-                  type: string
-                  nullable: true
-      responses:
-        "200":
-          description: Slot reservado
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Slot"
-        "500":
-          description: Slot não está disponível
-
-  /api/v1/professionals/{id}/slots/{slotId}/cancel:
-    parameters:
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: string
-          format: uuid
-      - name: slotId
-        in: path
-        required: true
-        schema:
-          type: string
-          format: uuid
-
-    patch:
-      summary: Cancelar reserva de slot
-      description: Cancela uma reserva, tornando o slot disponível novamente.
-      tags: [Slots]
-      security:
-        - bearerAuth: []
-      responses:
-        "204":
-          description: Reserva cancelada com sucesso
-        "500":
-          description: Slot não está reservado
 
   # ─── Schedules ───────────────────────────────────────────────────────────────
 

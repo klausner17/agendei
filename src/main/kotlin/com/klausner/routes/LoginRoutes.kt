@@ -4,7 +4,7 @@ import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
 import com.klausner.infraestructure.foldAndRespond
 import com.klausner.usecases.auth.LoginUseCase
-import com.klausner.usecases.auth.RegisterUserUseCase
+import com.klausner.usecases.auth.RegisterProfessionalUseCase
 import io.ktor.server.auth.AuthenticationConfig
 import io.ktor.server.auth.jwt.JWTPrincipal
 import io.ktor.server.auth.jwt.jwt
@@ -36,14 +36,14 @@ fun AuthenticationConfig.config() {
 }
 
 fun Route.loginRoutes() {
-    val registerUserUseCase: RegisterUserUseCase by getKoin().inject()
+    val registerProfessionalUseCase: RegisterProfessionalUseCase by getKoin().inject()
     val loginUseCase: LoginUseCase by getKoin().inject()
 
     rateLimit(RateLimitName("auth")) {
         post("/api/v1/auth/register") {
             val request = call.receive<RegisterRequest>()
-            val input = RegisterUserUseCase.Input(request.email, request.name, request.password)
-            foldAndRespond(registerUserUseCase.execute(input))
+            val input = RegisterProfessionalUseCase.Input(request.email, request.name, request.password)
+            foldAndRespond(registerProfessionalUseCase.execute(input))
         }
 
         post("/api/v1/auth/login") {

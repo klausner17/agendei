@@ -23,7 +23,6 @@ class CreateScheduleUseCaseTest {
     private val professionalRepository = mockk<IProfessionalRepository>()
     private val useCase = CreateScheduleUseCase(scheduleRepository, customerRepository, professionalRepository)
 
-    private val userId = UUID.randomUUID()
     private val professionalId = UUID.randomUUID()
     private val customerId = UUID.randomUUID()
     private val startTime = LocalDateTime.of(2026, 7, 1, 9, 0)
@@ -39,7 +38,6 @@ class CreateScheduleUseCaseTest {
     private val professional =
         Professional(
             id = professionalId,
-            userId = userId,
             name = "Dr. Ana",
             slots = emptyList(),
         )
@@ -47,7 +45,7 @@ class CreateScheduleUseCaseTest {
     private fun input(observation: String? = null) =
         CreateScheduleUseCase.Input(
             professionalId = professionalId,
-            requesterId = userId,
+            requesterId = professionalId,
             customerId = customerId,
             startTime = startTime,
             endTime = endTime,

@@ -4,6 +4,7 @@ import java.io.File
 import java.sql.DriverManager
 import kotlin.test.AfterTest
 import kotlin.test.Test
+import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 class DatabaseMigrationTest {
@@ -16,7 +17,7 @@ class DatabaseMigrationTest {
     }
 
     @Test
-    fun `should create users table with password_hash column`() {
+    fun `should keep professionals credentials columns`() {
         // given
         // a fresh sqlite database file
 
@@ -24,7 +25,21 @@ class DatabaseMigrationTest {
         DatabaseMigration.runMigrations(jdbcUrl)
 
         // then
-        assertTrue(columnExists("users", "password_hash"))
+        assertTrue(columnExists("professionals", "email"))
+        assertTrue(columnExists("professionals", "password"))
+    }
+
+    @Test
+    fun `should drop user link column and users table`() {
+        // given
+        // a fresh sqlite database file
+
+        // when
+        DatabaseMigration.runMigrations(jdbcUrl)
+
+        // then
+        assertFalse(columnExists("professionals", "user_id"))
+        assertFalse(tableExists("users"))
     }
 
     private fun columnExists(
@@ -33,5 +48,10 @@ class DatabaseMigrationTest {
     ): Boolean =
         DriverManager.getConnection(jdbcUrl).use { connection ->
             connection.metaData.getColumns(null, null, table, column).use { it.next() }
+        }
+
+    private fun tableExists(table: String): Boolean =
+        DriverManager.getConnection(jdbcUrl).use { connection ->
+            connection.metaData.getTables(null, null, table, null).use { it.next() }
         }
 }

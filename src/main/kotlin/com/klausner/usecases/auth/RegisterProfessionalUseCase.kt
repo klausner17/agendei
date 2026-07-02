@@ -1,53 +1,54 @@
 package com.klausner.usecases.auth
 
-import com.klausner.domains.User
-import com.klausner.repositories.user.IUserRepository
+import com.klausner.domains.Professional
+import com.klausner.repositories.professional.IProfessionalRepository
 import com.klausner.services.JwtService
 import com.klausner.services.PasswordHasher
 import com.klausner.usecases.UseCase
 import java.util.UUID
 
-class RegisterUserUseCase(
-    private val userRepository: IUserRepository,
+class RegisterProfessionalUseCase(
+    private val professionalRepository: IProfessionalRepository,
     private val passwordHasher: PasswordHasher,
     private val jwtService: JwtService,
-) : UseCase<RegisterUserUseCase.Input, RegisterUserUseCase.Output> {
+) : UseCase<RegisterProfessionalUseCase.Input, RegisterProfessionalUseCase.Output> {
     override fun execute(input: Input): Result<Output> =
         runCatching {
             validate(input)
             ensureEmailIsAvailable(input.email)
-            val user = createUser(input)
-            Output(token = jwtService.generateToken(user), user = toUserData(user))
+            val professional = createProfessional(input)
+            Output(token = jwtService.generateToken(professional), user = toProfessionalData(professional))
         }
 
     private fun validate(input: Input) {
         require(input.email.isNotBlank()) { "Email is required" }
+        require(input.name.isNotBlank()) { "Name is required" }
         require(input.password.length >= MINIMUM_PASSWORD_LENGTH) {
             "Password must have at least $MINIMUM_PASSWORD_LENGTH characters"
         }
     }
 
     private fun ensureEmailIsAvailable(email: String) {
-        val existing = userRepository.findByEmail(email).getOrThrow()
+        val existing = professionalRepository.findByEmail(email).getOrThrow()
         require(existing == null) { "Email already registered" }
     }
 
-    private fun createUser(input: Input): User {
-        val user =
-            User(
+    private fun createProfessional(input: Input): Professional {
+        val professional =
+            Professional(
                 id = UUID.randomUUID(),
-                email = input.email,
                 name = input.name,
-                passwordHash = passwordHasher.hash(input.password),
+                email = input.email,
+                password = passwordHasher.hash(input.password),
             )
-        return userRepository.create(user).getOrThrow()
+        return professionalRepository.create(professional).getOrThrow()
     }
 
-    private fun toUserData(user: User) =
-        UserData(
-            id = user.id.toString(),
-            email = user.email,
-            name = user.name,
+    private fun toProfessionalData(professional: Professional) =
+        ProfessionalData(
+            id = professional.id.toString(),
+            email = professional.email,
+            name = professional.name,
         )
 
     data class Input(
@@ -58,12 +59,12 @@ class RegisterUserUseCase(
 
     data class Output(
         val token: String,
-        val user: UserData,
+        val user: ProfessionalData,
     )
 
-    data class UserData(
+    data class ProfessionalData(
         val id: String,
-        val email: String,
+        val email: String?,
         val name: String,
     )
 
