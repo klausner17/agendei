@@ -13,12 +13,14 @@ import org.jetbrains.exposed.sql.transactions.transaction
 object DatabaseMigration {
     fun runMigrations(database: Database) {
         transaction(database) {
-            SchemaUtils.create(UserTable)
-            SchemaUtils.create(ProfessionalTable)
-            SchemaUtils.create(ServiceTable)
-            SchemaUtils.create(SlotTable)
-            SchemaUtils.create(CustomerTable)
-            SchemaUtils.create(ScheduleTable)
+            SchemaUtils.createMissingTablesAndColumns(
+                UserTable,
+                ProfessionalTable,
+                ServiceTable,
+                SlotTable,
+                CustomerTable,
+                ScheduleTable,
+            )
         }
     }
 }

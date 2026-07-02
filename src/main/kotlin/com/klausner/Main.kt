@@ -54,7 +54,7 @@ fun main() {
             allowHost("localhost:3000")
             allowHost("127.0.0.1:3001")
             allowHost("127.0.0.1:3000")
-            allowHost("www.awalab.com.br", schemes = listOf("https"))
+            allowHost("awalab.com.br", schemes = listOf("https"), subDomains = listOf("www"))
             allowMethod(HttpMethod.Get)
             allowMethod(HttpMethod.Post)
             allowMethod(HttpMethod.Put)
