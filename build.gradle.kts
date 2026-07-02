@@ -45,6 +45,7 @@ dependencies {
     implementation("ch.qos.logback:logback-core:1.5.16")
     implementation("ch.qos.logback:logback-classic:1.5.16")
     implementation("org.xerial:sqlite-jdbc:3.49.1.0")
+    implementation("org.flywaydb:flyway-core:11.8.2")
     implementation("io.insert-koin:koin-core:4.1.0")
     implementation("com.auth0:java-jwt:4.4.0")
 

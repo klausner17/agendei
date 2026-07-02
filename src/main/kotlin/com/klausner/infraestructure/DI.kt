@@ -41,7 +41,7 @@ import org.koin.dsl.module
 val mainModule =
     module {
         single { objectMapper }
-        single { Database.connect("jdbc:sqlite:./data.db", "org.sqlite.JDBC") }
+        single { Database.connect(DatabaseConfig.jdbcUrl, DatabaseConfig.DRIVER) }
 
         // services
         single {

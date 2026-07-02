@@ -28,20 +28,17 @@ import io.ktor.server.plugins.statuspages.StatusPages
 import io.ktor.server.routing.get
 import io.ktor.server.routing.route
 import io.ktor.server.routing.routing
-import org.jetbrains.exposed.sql.Database
 import org.koin.core.context.startKoin
 import kotlin.time.Duration.Companion.seconds
 
 fun main() {
     embeddedServer(factory = Netty, 8080) {
-        val koinApp =
-            startKoin {
-                modules(mainModule)
-            }
+        startKoin {
+            modules(mainModule)
+        }
 
         // Executar migrations
-        val database = koinApp.koin.get<Database>()
-        DatabaseMigration.runMigrations(database)
+        DatabaseMigration.runMigrations()
         install(ContentNegotiation) {
             jackson {
                 registerModule(JavaTimeModule())
