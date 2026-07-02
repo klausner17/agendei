@@ -52,6 +52,9 @@ fun main() {
         install(CORS) {
             allowHost("localhost:3001")
             allowHost("localhost:3000")
+            allowHost("127.0.0.1:3001")
+            allowHost("127.0.0.1:3000")
+            allowHost("www.awalab.com.br", schemes = listOf("https"))
             allowMethod(HttpMethod.Get)
             allowMethod(HttpMethod.Post)
             allowMethod(HttpMethod.Put)
